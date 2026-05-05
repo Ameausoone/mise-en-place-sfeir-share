@@ -5,7 +5,8 @@ title: "Mise en place — Gérer votre environnement de développement"
 info: |
   ## Mise en place
   Une présentation sur [mise](https://mise.jdx.dev/), l'outil polyvalent pour gérer
-  les versions de runtimes, les variables d'environnement, les tâches et les hooks.
+  les versions de runtimes, les variables d'environnement, les tâches, les hooks
+  et les secrets avec [fnox](https://fnox.jdx.dev/).
 class: text-center
 drawings:
   persist: false
@@ -18,7 +19,7 @@ comark: true
 ### Gérer votre environnement de développement
 
 <div class="mt-4 text-lg opacity-80">
-  Tools · Tasks · Hooks
+  Tools · Registry · Tasks · Hooks · fnox
 </div>
 
 <div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
@@ -116,6 +117,19 @@ avec un seul outil rapide, écrit en Rust 🦀.
   </div>
 </div>
 
+<div class="grid grid-cols-2 gap-4 mt-4 max-w-sm mx-auto">
+  <div v-click class="p-3 rounded border border-primary/30">
+    <div class="text-3xl mb-2">📦</div>
+    <div class="font-bold">Registry</div>
+    <div class="text-sm opacity-70">800+ outils disponibles</div>
+  </div>
+  <div v-click class="p-3 rounded border border-primary/30">
+    <div class="text-3xl mb-2">🔐</div>
+    <div class="font-bold">fnox</div>
+    <div class="text-sm opacity-70">Secrets chiffrés en git</div>
+  </div>
+</div>
+
 <div v-click class="mt-8">
   <a href="https://mise.jdx.dev" target="_blank" class="text-primary">mise.jdx.dev</a>
 </div>
@@ -139,6 +153,9 @@ brew install mise
 
 # Via cargo
 cargo install mise
+
+# Via winget (Windows)
+winget install jdx.mise
 ```
 
 </div>
@@ -156,26 +173,182 @@ eval "$(mise activate zsh)"
 
 # Fish (~/.config/fish/config.fish)
 mise activate fish | source
+
+# Nushell (~/.config/nushell/config.nu)
+mise activate nu | save -f ~/.config/nushell/mise.nu
 ```
 
 </div>
 </div>
 
-<div v-click class="mt-6">
+<div v-click class="mt-4">
 
-### Vérification
+### `mise doctor` — diagnostics d'installation
 
 ```bash
-mise --version
-# mise 2024.x.x
+mise doctor
+# ✓ mise version: 2024.x.x
+# ✓ shell: bash
+# ✗ nvm detected — can conflict with mise, disable it
+# ✓ ~/.local/share/mise/shims is in PATH
 ```
 
 </div>
 
 <!--
-L'installation est rapide et l'activation dans le shell permet à mise d'intercepter
-les commandes et de charger automatiquement le bon environnement selon le répertoire.
+L'installation est rapide et l'activation dans le shell permet à mise de charger
+automatiquement le bon environnement selon le répertoire courant.
+`mise doctor` est la première commande à lancer en cas de problème.
 -->
+
+---
+layout: section
+---
+
+# 📦 Registry
+
+---
+layout: two-cols
+layoutClass: gap-8
+---
+
+# Registry — 800+ outils disponibles
+
+<div class="mt-2">
+
+### Explorer le registre
+
+```bash
+# Lister tous les outils
+mise registry
+
+# Rechercher
+mise registry | grep -i terraform
+mise registry | grep -i java
+
+# Afficher les backends disponibles
+mise registry --backend asdf
+mise registry --backend aqua
+```
+
+### Quelques outils populaires
+
+```bash
+mise use node terraform kubectl \
+          helm awscli gh jq ripgrep
+```
+
+| Outil | Backend |
+|-------|---------|
+| `node`, `python`, `go`, `ruby` | core / asdf |
+| `terraform`, `kubectl`, `helm` | asdf / aqua |
+| `gh`, `jq`, `ripgrep`, `fd`    | aqua / ubi |
+
+</div>
+
+::right::
+
+<div class="mt-2">
+
+### Les backends
+
+mise peut installer des outils via **plusieurs sources** :
+
+```toml
+[tools]
+# asdf (par défaut, compatible 800+ plugins)
+node = "20"
+terraform = "1.7"
+
+# npm — package npm global
+"npm:prettier" = "latest"
+"npm:typescript" = "5"
+
+# cargo — compile depuis crates.io
+"cargo:ripgrep" = "14"
+
+# pipx — package Python isolé
+"pipx:ansible" = "latest"
+
+# ubi — binaire GitHub Releases (universel)
+"ubi:cli/cli" = "latest"        # gh CLI
+"ubi:sharkdp/bat" = "latest"    # bat
+
+# go — binaire Go
+"go:mvdan.cc/gofumpt" = "latest"
+```
+
+</div>
+
+---
+
+# Registry — Lockfile
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+### `mise.lock` — figer les versions
+
+```toml
+# mise.lock — généré automatiquement
+# À commiter dans git !
+
+[tools.node]
+version  = "20.11.0"
+checksum = "sha256:abc123…"
+
+[tools.python]
+version  = "3.12.3"
+checksum = "sha256:def456…"
+
+[tools.terraform]
+version  = "1.7.5"
+checksum = "sha256:ghi789…"
+```
+
+```bash
+# Activer le lockfile
+mise settings set lockfile true
+
+# Installer exactement les versions lockées
+mise install
+```
+
+</div>
+
+<div v-click>
+
+### Reproductibilité garantie
+
+```bash
+# Machine A (dev)
+mise install  # installe node@20.11.0
+
+# Machine B (CI)
+mise install  # installe node@20.11.0 ✓
+
+# Mettre à jour le lockfile
+mise upgrade        # met à jour toutes les versions
+mise upgrade node   # met à jour seulement node
+```
+
+### Intégration CI avec `jdx/mise-action`
+
+```yaml
+- uses: jdx/mise-action@v2
+  # lit automatiquement .mise.toml + mise.lock
+  # installe exactement les bonnes versions
+```
+
+<div class="mt-3 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
+  💡 Comme <code>package-lock.json</code> mais pour
+  <strong>tous vos runtimes et outils CLI</strong>.
+</div>
+
+</div>
+
+</div>
 
 ---
 layout: section
@@ -257,72 +430,6 @@ terraform  = "1.7"
 awscli     = "2"
 jq         = "latest"
 ```
-
-</div>
-
----
-
-# Tools — Backends & Lockfile
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
-
-### Les backends de mise
-
-mise peut installer des outils via **plusieurs sources** :
-
-```toml
-[tools]
-# asdf (par défaut, 800+ plugins)
-node = "20"
-
-# npm — installe un package npm global
-"npm:prettier" = "latest"
-
-# cargo — compile depuis crates.io
-"cargo:ripgrep" = "14"
-
-# pipx — package Python isolé
-"pipx:ansible" = "latest"
-
-# ubi — binaire GitHub Releases
-"ubi:cli/cli" = "latest"        # gh CLI
-
-# go — installe un binaire Go
-"go:mvdan.cc/gofumpt" = "latest"
-```
-
-</div>
-
-<div v-click>
-
-### Lockfile `mise.lock`
-
-```toml
-# mise.lock — figer les versions exactes
-# Généré automatiquement, à commiter !
-
-[tools.node]
-version = "20.11.0"
-[tools.python]
-version = "3.12.3"
-```
-
-```bash
-# Activer le lockfile
-mise settings set lockfile true
-
-# Installer exactement les versions lockées
-mise install
-```
-
-<div class="mt-3 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
-  💡 Comme <code>package-lock.json</code> mais pour vos runtimes.
-  Garantit la reproductibilité entre machines et en CI.
-</div>
-
-</div>
 
 </div>
 
