@@ -5,7 +5,7 @@ title: "Mise en place — Gérer votre environnement de développement"
 info: |
   ## Mise en place
   Une présentation sur [mise](https://mise.jdx.dev/), l'outil polyvalent pour gérer
-  les versions de runtimes, les variables d'environnement et les tâches de développement.
+  les versions de runtimes, les variables d'environnement, les tâches et les hooks.
 class: text-center
 drawings:
   persist: false
@@ -18,7 +18,7 @@ comark: true
 ### Gérer votre environnement de développement
 
 <div class="mt-4 text-lg opacity-80">
-  Runtimes · Variables d'environnement · Tâches
+  Tools · Tasks · Hooks
 </div>
 
 <div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
@@ -33,7 +33,7 @@ comark: true
 
 <!--
 mise (prononcé "meez") est un outil en ligne de commande qui unifie la gestion
-des versions de runtimes, des variables d'environnement et des tâches de projet.
+des versions de runtimes, des variables d'environnement, des tâches et des hooks de projet.
 -->
 
 ---
@@ -93,21 +93,26 @@ avec un seul outil rapide, écrit en Rust 🦀.
 
 </div>
 
-<div class="grid grid-cols-3 gap-6 mt-8">
+<div class="grid grid-cols-4 gap-4 mt-8">
   <div v-click class="p-3 rounded border border-primary/30">
     <div class="text-3xl mb-2">🔧</div>
-    <div class="font-bold">Runtimes</div>
-    <div class="text-sm opacity-70">Node, Python, Go, Ruby, Java…</div>
+    <div class="font-bold">Tools</div>
+    <div class="text-sm opacity-70">Node, Python, Go, Ruby…</div>
   </div>
   <div v-click class="p-3 rounded border border-primary/30">
     <div class="text-3xl mb-2">🌿</div>
-    <div class="font-bold">Environnements</div>
-    <div class="text-sm opacity-70">Variables d'env par répertoire</div>
+    <div class="font-bold">Env</div>
+    <div class="text-sm opacity-70">Variables par répertoire</div>
   </div>
   <div v-click class="p-3 rounded border border-primary/30">
     <div class="text-3xl mb-2">📋</div>
-    <div class="font-bold">Tâches</div>
-    <div class="text-sm opacity-70">Scripts et automatisations</div>
+    <div class="font-bold">Tasks</div>
+    <div class="text-sm opacity-70">Scripts & automatisations</div>
+  </div>
+  <div v-click class="p-3 rounded border border-primary/30">
+    <div class="text-3xl mb-2">🪝</div>
+    <div class="font-bold">Hooks</div>
+    <div class="text-sm opacity-70">Réagir aux événements</div>
   </div>
 </div>
 
@@ -173,142 +178,522 @@ les commandes et de charger automatiquement le bon environnement selon le réper
 -->
 
 ---
+layout: section
+---
+
+# 🔧 Tools
+
+---
 layout: two-cols
 layoutClass: gap-8
 ---
 
-# Gestion des Runtimes
+# Tools — Commandes essentielles
 
-<div class="mt-4">
+<div class="mt-2">
 
-### Installer une version
+### Installer & utiliser
 
 ```bash
-# Installer Node.js 20
+# Installer une version
 mise install node@20
-
-# Installer la dernière version de Python
 mise install python@latest
-
-# Installer plusieurs outils d'un coup
 mise install node@20 python@3.12 go@1.22
-```
 
-### Utiliser une version
-
-```bash
-# Définir globalement
-mise use --global node@20
-
-# Définir pour le projet courant
+# Définir pour le projet courant (.mise.toml)
 mise use node@20
 
-# Utiliser une version temporaire
+# Définir globalement (~/.config/mise/config.toml)
+mise use --global node@20
+
+# Exécuter une commande avec une version précise
 mise exec node@18 -- node --version
+
+# Lancer un shell avec les outils chargés
+mise shell node@18
+```
+
+### Lister
+
+```bash
+mise list           # versions installées
+mise ls-remote node # versions disponibles
+mise outdated       # outils à mettre à jour
+mise upgrade        # tout mettre à jour
 ```
 
 </div>
 
 ::right::
 
-<div class="mt-4">
+<div class="mt-2">
 
-### Lister les outils disponibles
+### Registre & plugins
 
 ```bash
-# Lister les plugins disponibles
+# Explorer les outils disponibles
 mise registry
 
-# Lister les versions installées
-mise list
+# Rechercher un outil
+mise registry | grep terraform
 
-# Lister les versions disponibles
-mise ls-remote node
+# Ajouter un plugin asdf existant
+mise plugin add scala \
+  https://github.com/asdf-community/asdf-scala
+
+# Ajouter un plugin custom
+mise plugin add my-tool \
+  https://github.com/user/mise-my-tool
 ```
 
-### Fichier de configuration
+### Dans `.mise.toml`
 
 ```toml
-# .mise.toml (à la racine du projet)
 [tools]
-node = "20"
-python = "3.12"
-go = "1.22"
+node       = "20"          # version majeure
+python     = "3.12.3"      # version exacte
+go         = "latest"      # dernière stable
+terraform  = "1.7"
+awscli     = "2"
+jq         = "latest"
 ```
 
 </div>
 
 ---
 
-# Le fichier `.mise.toml`
+# Tools — Backends & Lockfile
 
 <div class="grid grid-cols-2 gap-6">
 
 <div>
 
-### Configuration complète
+### Les backends de mise
+
+mise peut installer des outils via **plusieurs sources** :
 
 ```toml
-# .mise.toml
 [tools]
-node = "20.11.0"
-python = "3.12"
-terraform = "1.7.0"
-awscli = "latest"
+# asdf (par défaut, 800+ plugins)
+node = "20"
 
-[env]
-NODE_ENV = "development"
-DATABASE_URL = "postgres://localhost/mydb"
-API_BASE_URL = "http://localhost:3000"
+# npm — installe un package npm global
+"npm:prettier" = "latest"
 
-[tasks.dev]
-run = "npm run dev"
-description = "Démarrer le serveur de développement"
+# cargo — compile depuis crates.io
+"cargo:ripgrep" = "14"
 
-[tasks.test]
-run = "npm test"
-description = "Lancer les tests"
+# pipx — package Python isolé
+"pipx:ansible" = "latest"
 
-[tasks.lint]
-run = "npm run lint"
-description = "Vérifier le style du code"
+# ubi — binaire GitHub Releases
+"ubi:cli/cli" = "latest"        # gh CLI
+
+# go — installe un binaire Go
+"go:mvdan.cc/gofumpt" = "latest"
 ```
 
 </div>
-
-<div>
 
 <div v-click>
 
-### Héritage et surcharge
+### Lockfile `mise.lock`
 
+```toml
+# mise.lock — figer les versions exactes
+# Généré automatiquement, à commiter !
+
+[tools.node]
+version = "20.11.0"
+[tools.python]
+version = "3.12.3"
 ```
-monorepo/
-├── .mise.toml        # Config globale
-├── backend/
-│   └── .mise.toml    # Surcharge pour le backend
-└── frontend/
-    └── .mise.toml    # Surcharge pour le frontend
-```
-
-</div>
-
-<div v-click class="mt-4">
-
-### Mise en place automatique
 
 ```bash
-cd mon-projet/
-# mise charge automatiquement :
-# - les outils définis dans .mise.toml
-# - les variables d'environnement
-# - active les bonnes versions
+# Activer le lockfile
+mise settings set lockfile true
+
+# Installer exactement les versions lockées
+mise install
+```
+
+<div class="mt-3 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
+  💡 Comme <code>package-lock.json</code> mais pour vos runtimes.
+  Garantit la reproductibilité entre machines et en CI.
+</div>
+
+</div>
+
+</div>
+
+---
+layout: section
+---
+
+# 📋 Tasks
+
+---
+layout: two-cols
+layoutClass: gap-8
+---
+
+# Tasks — Dans `.mise.toml`
+
+<div class="mt-2">
+
+### Définir des tâches
+
+```toml
+[tasks.install]
+run         = "npm install"
+description = "Installer les dépendances"
+
+[tasks.dev]
+run         = "npm run dev"
+description = "Démarrer le serveur de développement"
+depends     = ["install"]
+
+[tasks.test]
+run         = "npm test -- --coverage"
+description = "Tests avec couverture de code"
+
+[tasks.lint]
+run         = ["eslint src/", "prettier --check src/"]
+description = "Vérifier le style du code"
+
+[tasks.build]
+run         = "npm run build"
+description = "Build de production"
+depends     = ["lint", "test"]
+```
+
+</div>
+
+::right::
+
+<div class="mt-2">
+
+### Exécuter
+
+```bash
+# Lister toutes les tâches
+mise tasks
+mise run --list
+
+# Lancer une tâche
+mise run dev
+mise run test
+
+# Passer des arguments
+mise run test -- --watch
+
+# Exécution parallèle
+mise run --jobs 4 lint test
+
+# Voir ce qui serait exécuté
+mise run --dry-run build
+```
+
+### Variables dans les tâches
+
+```toml
+[tasks.deploy]
+run = """
+  echo "Deploying to $ENVIRONMENT"
+  docker build -t myapp:$VERSION .
+"""
+env   = { ENVIRONMENT = "production" }
+depends = ["test", "build"]
+```
+
+</div>
+
+---
+
+# Tasks — Tâches fichiers
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+### Scripts dans `.mise/tasks/`
+
+Des **scripts shell exécutables** directement dans le repo,
+sans les écrire dans le `.mise.toml` :
+
+```
+.mise/
+└── tasks/
+    ├── dev          ← mise run dev
+    ├── test         ← mise run test
+    ├── build        ← mise run build
+    └── db/
+        ├── migrate  ← mise run db:migrate
+        └── seed     ← mise run db:seed
+```
+
+```bash
+#!/usr/bin/env bash
+# .mise/tasks/dev
+#MISE description="Démarrer le serveur de dev"
+#MISE depends=["install"]
+
+set -euo pipefail
+npm run dev
+```
+
+</div>
+
+<div v-click>
+
+### Avantages des tâches fichiers
+
+- Écrites dans n'importe quel langage (`bash`, `python`, `node`…)
+- Coloration syntaxique dans l'éditeur
+- Testables et versionnables indépendamment
+
+```python
+#!/usr/bin/env python3
+# .mise/tasks/generate-report
+#MISE description="Générer le rapport mensuel"
+
+import json, datetime
+
+data = {"date": str(datetime.date.today())}
+print(json.dumps(data, indent=2))
+```
+
+```bash
+# Rendre exécutable
+chmod +x .mise/tasks/generate-report
+
+# Puis simplement :
+mise run generate-report
 ```
 
 </div>
 
 </div>
+
+---
+
+# Tasks — Options avancées
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+### `mise watch` — Rechargement automatique
+
+```bash
+# Relancer la tâche à chaque modification
+mise watch -t test
+
+# Surveiller des fichiers spécifiques
+mise watch -t build -- src/**/*.ts
+```
+
+```toml
+# Configurer dans .mise.toml
+[tasks.test]
+run    = "npm test"
+sources = ["src/**/*.ts", "tests/**/*.ts"]
+outputs = ["coverage/"]
+```
+
+### Dépendances & graphe
+
+```toml
+[tasks.ci]
+# Lance lint et test en parallèle,
+# puis build si les deux réussissent
+depends = ["lint", "test"]
+run     = "npm run build"
+```
+
 </div>
+
+<div v-click>
+
+### Arguments & `usage`
+
+```toml
+[tasks.deploy]
+#USAGE flag "-e --env <env>" help="Target environment"
+#USAGE flag "--dry-run"      help="Simulate only"
+run = """
+  echo "Deploy to: $usage_env"
+  if [ "$usage_dry_run" = "true" ]; then
+    echo "(dry-run, nothing deployed)"
+  fi
+"""
+```
+
+```bash
+mise run deploy --env staging
+mise run deploy --env prod --dry-run
+```
+
+### `mise run` — aide intégrée
+
+```bash
+mise run --help          # aide globale
+mise run deploy --help   # aide de la tâche
+```
+
+</div>
+
+</div>
+
+---
+layout: section
+---
+
+# 🪝 Hooks
+
+---
+
+# Hooks — Réagir aux événements
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+### Hooks de répertoire
+
+Déclenchés automatiquement quand vous **entrez ou quittez** un répertoire :
+
+```toml
+# .mise.toml
+[hooks]
+enter = "echo '👋 Bienvenue dans {{config.project_root}}'"
+leave = "echo '👋 À bientôt !'"
+```
+
+### Cas d'usage concrets
+
+```toml
+[hooks]
+# Vérifier que les dépendances sont à jour
+enter = """
+  if [ package.json -nt node_modules ]; then
+    echo "⚠️  Dépendances obsolètes, lancez : mise run install"
+  fi
+"""
+
+# Nettoyer les processus au départ
+leave = "pkill -f 'npm run dev' || true"
+```
+
+</div>
+
+<div v-click>
+
+### Hooks de tâches — `pre` / `post`
+
+```toml
+[tasks.deploy]
+run  = "./scripts/deploy.sh"
+
+[hooks]
+# Avant chaque tâche
+pre_task  = """
+  echo "🚀 Démarrage : $MISE_TASK_NAME"
+  date
+"""
+
+# Après chaque tâche (succès ou échec)
+post_task = """
+  echo "✅ Terminé  : $MISE_TASK_NAME"
+  echo "   Exit code : $MISE_TASK_EXIT_CODE"
+"""
+```
+
+### Variables disponibles dans les hooks
+
+| Variable | Valeur |
+|---|---|
+| `MISE_TASK_NAME` | Nom de la tâche |
+| `MISE_TASK_EXIT_CODE` | Code de sortie |
+| `config.project_root` | Racine du projet |
+
+</div>
+
+</div>
+
+---
+
+# Hooks — `watch_files`
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+### Surveiller des fichiers
+
+`watch_files` déclenche une tâche automatiquement dès qu'un fichier change :
+
+```toml
+# .mise.toml
+
+[tasks.codegen]
+run         = "npm run generate"
+description = "Regénérer le code depuis le schéma"
+
+[tasks.sync-deps]
+run         = "npm install"
+description = "Synchroniser les dépendances"
+
+[watch_files]
+# Regénérer si le schéma GraphQL change
+"schema.graphql" = "codegen"
+
+# Réinstaller si package.json change
+"package.json"   = "sync-deps"
+```
+
+</div>
+
+<div v-click>
+
+### Activer la surveillance
+
+```bash
+# Démarrer le watcher
+mise watch
+
+# Tous les watch_files sont surveillés
+# Les tâches se déclenchent automatiquement
+# ↓ Modifiez schema.graphql…
+# ✓ codegen relancé automatiquement !
+```
+
+### Combinaison hooks + watch
+
+```toml
+[watch_files]
+".env.example" = "check-env"
+
+[tasks.check-env]
+run = """
+  echo "⚠️  .env.example a changé !"
+  echo "Vérifiez votre .env local."
+"""
+```
+
+<div class="mt-3 p-3 rounded bg-green-500/10 border border-green-500/30 text-sm">
+  ✅ Fini les <em>"n'oublie pas de relancer X après avoir modifié Y"</em>
+</div>
+
+</div>
+
+</div>
+
+---
+layout: section
+---
+
+# 🌍 Environnement & Configuration
 
 ---
 
@@ -324,111 +709,55 @@ cd mon-projet/
 [env]
 # Variables statiques
 NODE_ENV = "development"
-PORT = "3000"
+PORT     = "3000"
 
-# Référencer d'autres variables
-DATABASE_URL = "postgres://{{env.DB_USER}}:{{env.DB_PASS}}@localhost/mydb"
-
-# Valeur depuis un fichier
+# Charger un fichier .env
 _.file = ".env"
-
-# Valeur depuis une commande
-API_KEY = { value = "{{exec('vault kv get -field=key secret/api')}}" }
-```
-
-</div>
-
-<div>
-
-### Fichiers `.env`
-
-```toml
-# .mise.toml
-[env]
-_.file = ".env"
+# Ou plusieurs
 _.file = [".env", ".env.local"]
-```
 
-<div v-click class="mt-4">
-
-### Path management
-
-```toml
-[env]
 # Ajouter au PATH
 _.path = ["./bin", "./node_modules/.bin"]
-
-# Exemple pratique
-GOPATH = "{{env.HOME}}/go"
-_.path = "{{env.GOPATH}}/bin"
 ```
 
-</div>
-
-</div>
-</div>
-
----
-
-# Gestion des Tâches
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
-
-### Définition dans `.mise.toml`
+### Templates
 
 ```toml
-[tasks.build]
-run = "npm run build"
-description = "Compiler le projet"
+[env]
+GOPATH = "{{env.HOME}}/go"
+_.path = "{{env.GOPATH}}/bin"
 
-[tasks.test]
-run = "npm test -- --coverage"
-description = "Lancer les tests avec couverture"
-
-[tasks.deploy]
-run = """
-  npm run build
-  docker build -t myapp .
-  docker push myapp
-"""
-description = "Builder et déployer"
-depends = ["test"]
+DATABASE_URL = "postgres://{{env.DB_USER}}@localhost/mydb"
 ```
 
 </div>
 
 <div>
 
-### Utilisation
+### Config locale (secrets)
 
-```bash
-# Lister les tâches disponibles
-mise tasks
-# ou
-mise run --list
-
-# Exécuter une tâche
-mise run build
-mise run test
-mise run deploy
-
-# Exécuter en parallèle
-mise run --parallel build test
+```toml
+# .mise.local.toml  ← dans .gitignore !
+[env]
+DB_USER   = "alice"
+DB_PASS   = "s3cr3t"
+API_KEY   = "sk-..."
 ```
 
-<div v-click class="mt-4">
-
-### Tâches comme scripts
+### Héritage entre répertoires
 
 ```
-.mise/tasks/
-├── build       # Script shell exécutable
-├── test
-└── deploy
+monorepo/
+├── .mise.toml          ← Node 20, env communs
+├── backend/
+│   └── .mise.toml      ← Python 3.12, PORT=8000
+└── frontend/
+    └── .mise.toml      ← PORT=3000
 ```
 
+<div class="mt-3 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
+  💡 Chaque sous-répertoire hérite et peut surcharger
+  la configuration du parent.
 </div>
 
 </div>
@@ -445,31 +774,37 @@ layout: center
 <div v-click class="p-4 rounded-lg border border-primary/30 text-center">
   <div class="text-2xl font-bold mb-2">asdf</div>
   <div class="text-sm opacity-70 mb-3">Migration transparente</div>
-  ```bash
-  # mise lit .tool-versions
-  # Compatible avec les plugins asdf
-  mise install
-  ```
+
+```bash
+# mise lit .tool-versions
+# Compatible avec les plugins asdf
+mise install
+```
+
 </div>
 
 <div v-click class="p-4 rounded-lg border border-primary/30 text-center">
   <div class="text-2xl font-bold mb-2">nvm / fnm</div>
   <div class="text-sm opacity-70 mb-3">Remplacer Node manager</div>
-  ```bash
-  # Importer depuis .nvmrc
-  mise use node@$(cat .nvmrc)
-  # Lire .nvmrc automatiquement
-  ```
+
+```bash
+# Importer depuis .nvmrc
+mise use node@$(cat .nvmrc)
+# Lire .nvmrc automatiquement
+```
+
 </div>
 
 <div v-click class="p-4 rounded-lg border border-primary/30 text-center">
   <div class="text-2xl font-bold mb-2">direnv</div>
   <div class="text-sm opacity-70 mb-3">Variables d'env</div>
-  ```bash
-  # mise gère les .envrc
-  # ou utilise .mise.toml [env]
-  # Compatible direnv
-  ```
+
+```bash
+# mise gère les .envrc
+# ou utilise .mise.toml [env]
+# Compatible direnv
+```
+
 </div>
 
 </div>
@@ -534,20 +869,25 @@ layoutClass: gap-8
 
 # Bonnes pratiques
 
-### Structure de projet recommandée
+### Structure recommandée
 
 ```
 mon-projet/
 ├── .mise.toml          # Outils + env + tâches
 ├── .mise.local.toml    # Config locale (gitignored)
-├── .gitignore
-└── src/
+├── mise.lock           # Lockfile (commité)
+├── .mise/
+│   └── tasks/          # Tâches fichiers
+│       ├── dev
+│       ├── test
+│       └── build
+└── .gitignore
 ```
 
 ### `.gitignore`
 
 ```gitignore
-# Fichier de config locale mise (secrets)
+# Secrets locaux mise
 .mise.local.toml
 .env
 .env.local
@@ -555,63 +895,7 @@ mon-projet/
 
 ::right::
 
-### Partager la configuration
-
-```toml
-# .mise.toml (commité dans git)
-[tools]
-node = "20"
-python = "3.12"
-
-[env]
-NODE_ENV = "development"
-# Ne pas mettre de secrets ici !
-
-[tasks.setup]
-run = """
-  npm install
-  pip install -r requirements.txt
-"""
-description = "Installer les dépendances"
-```
-
-<div v-click class="mt-4 p-3 rounded bg-blue-500/10 border border-blue-500/30">
-  💡 <code>.mise.toml</code> remplace <code>.nvmrc</code>, <code>.python-version</code>,
-  <code>.tool-versions</code> et <code>Makefile</code> en un seul fichier.
-</div>
-
----
-
-# Fonctionnalités avancées
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
-
-### Plugins personnalisés
-
-```bash
-# Ajouter un plugin custom
-mise plugin add my-tool https://github.com/user/mise-my-tool
-
-# Utiliser un plugin asdf existant
-mise plugin add scala https://github.com/asdf-community/asdf-scala
-```
-
-### Hooks
-
-```toml
-# .mise.toml
-[hooks]
-enter = "echo 'Bienvenue dans {{config.project_root}}'"
-leave = "echo 'Au revoir !'"
-```
-
-</div>
-
-<div>
-
-### Intégration CI/CD
+### CI/CD avec `jdx/mise-action`
 
 ```yaml
 # .github/workflows/ci.yml
@@ -621,25 +905,16 @@ leave = "echo 'Au revoir !'"
 - name: Install tools
   run: mise install
 
-- name: Run tests
-  run: mise run test
+- name: Run CI
+  run: mise run ci
+  env:
+    MISE_YES: "1"   # Approuver automatiquement
 ```
 
-<div v-click class="mt-4">
-
-### Trust
-
-```bash
-# Approuver un .mise.toml
-mise trust
-
-# Approuver automatiquement (CI)
-MISE_YES=1 mise install
-```
-
-</div>
-
-</div>
+<div v-click class="mt-4 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
+  💡 <code>.mise.toml</code> remplace <code>.nvmrc</code>,
+  <code>.tool-versions</code>, <code>Makefile</code> et <code>.envrc</code>
+  en un <strong>seul fichier</strong>.
 </div>
 
 ---
@@ -649,17 +924,17 @@ class: text-center
 
 # Récapitulatif
 
-<div class="grid grid-cols-2 gap-6 mt-6 text-left max-w-3xl mx-auto">
+<div class="grid grid-cols-2 gap-6 mt-4 text-left max-w-3xl mx-auto">
 
 <div v-click>
 
 ### ✅ Ce que mise fait
 
-- Gère les versions de runtimes (Node, Python, Go…)
-- Charge les variables d'environnement par projet
-- Exécute des tâches de développement
-- Compatible avec l'écosystème asdf
-- Ultra-rapide (Rust 🦀)
+- 🔧 **Tools** — gère Node, Python, Go, Terraform…
+- 🌿 **Env** — variables d'environnement par projet
+- 📋 **Tasks** — scripts reproductibles avec dépendances
+- 🪝 **Hooks** — réagir aux événements du projet
+- ⚡ **Rapide** — écrit en Rust, ~4ms de démarrage
 
 </div>
 
@@ -677,8 +952,11 @@ echo 'eval "$(mise activate bash)"' >> ~/.bashrc
 # 3. Créer un .mise.toml
 mise use node@20 python@3.12
 
-# 4. Installer les outils
+# 4. Tout installer
 mise install
+
+# 5. Lancer une tâche
+mise run dev
 ```
 
 </div>
@@ -700,15 +978,18 @@ GitHub : [github.com/jdx/mise](https://github.com/jdx/mise)
 
 </div>
 
-<div class="mt-8 grid grid-cols-3 gap-4 max-w-xl mx-auto text-sm">
+<div class="mt-8 grid grid-cols-4 gap-4 max-w-2xl mx-auto text-sm">
   <a href="https://mise.jdx.dev/getting-started.html" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
     📖 Getting Started
   </a>
-  <a href="https://mise.jdx.dev/configuration.html" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
-    ⚙️ Configuration
-  </a>
   <a href="https://mise.jdx.dev/tasks/" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
     📋 Tasks
+  </a>
+  <a href="https://mise.jdx.dev/hooks.html" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
+    🪝 Hooks
+  </a>
+  <a href="https://mise.jdx.dev/registry.html" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
+    🔧 Registry
   </a>
 </div>
 
