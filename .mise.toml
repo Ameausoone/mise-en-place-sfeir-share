@@ -1,0 +1,24 @@
+[tools]
+node = "24"
+
+[env]
+NODE_ENV = "development"
+
+[tasks.install]
+run = "npm install"
+description = "Installer les dépendances"
+
+[tasks.dev]
+run = "npm run dev"
+description = "Démarrer le serveur de développement Slidev"
+depends = ["install"]
+
+[tasks.build]
+run = "npm run build"
+description = "Compiler les slides pour la production"
+depends = ["install"]
+
+[tasks.export]
+run = "npm run export"
+description = "Exporter les slides en PDF"
+depends = ["install"]
