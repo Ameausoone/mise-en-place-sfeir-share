@@ -1,13 +1,12 @@
 ---
-layout: center
+layout: two-cols
+layoutClass: gap-8
 class: text-center
 ---
 
 # Récapitulatif
 
-<div class="grid grid-cols-2 gap-6 mt-4 text-left max-w-3xl mx-auto">
-
-<div v-click>
+<v-click>
 
 ### ✅ Ce que mise (+ fnox) fait
 
@@ -19,9 +18,11 @@ class: text-center
 - 🔐 **fnox** — secrets chiffrés dans git ou cloud
 - ⚡ **Rapide** — écrit en Rust, ~4ms de démarrage
 
-</div>
+</v-click>
 
-<div v-click>
+::right::
+
+<v-click>
 
 ### 🚀 Pour démarrer
 
@@ -33,7 +34,7 @@ curl https://mise.run | sh
 echo 'eval "$(mise activate bash)"' >> ~/.bashrc
 
 # 3. Créer un .mise.toml
-mise use node@20 python@3.12
+mise use node@24 python@3.12
 
 # 4. Tout installer
 mise install
@@ -42,9 +43,7 @@ mise install
 mise run dev
 ```
 
-</div>
-
-</div>
+</v-click>
 
 ---
 layout: center
@@ -53,27 +52,17 @@ class: text-center
 
 # Merci ! 🙏
 
-<div class="mt-6 text-lg opacity-80">
-
 Documentation officielle : [mise.jdx.dev](https://mise.jdx.dev) · [fnox.jdx.dev](https://fnox.jdx.dev)
 
 GitHub : [github.com/jdx/mise](https://github.com/jdx/mise) · [github.com/jdx/fnox](https://github.com/jdx/fnox)
 
-</div>
+<v-clicks>
 
-<div class="mt-8 grid grid-cols-4 gap-4 max-w-2xl mx-auto text-sm">
-  <a href="https://mise.jdx.dev/getting-started.html" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
-    📖 Getting Started
-  </a>
-  <a href="https://mise.jdx.dev/tasks/" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
-    📋 Tasks
-  </a>
-  <a href="https://mise.jdx.dev/hooks.html" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
-    🪝 Hooks
-  </a>
-  <a href="https://fnox.jdx.dev" target="_blank" class="p-3 rounded border border-primary/30 hover:border-primary/60 transition-colors">
-    🔐 fnox
-  </a>
-</div>
+- 📖 [Getting Started](https://mise.jdx.dev/getting-started.html)
+- 📋 [Tasks](https://mise.jdx.dev/tasks/)
+- 🪝 [Hooks](https://mise.jdx.dev/hooks.html)
+- 🔐 [fnox docs](https://fnox.jdx.dev)
+
+</v-clicks>
 
 <PoweredBySlidev mt-10 />

@@ -11,21 +11,19 @@ layoutClass: gap-8
 
 # Tools — Commandes essentielles
 
-<div class="mt-2">
-
 ### Installer & utiliser
 
 ```bash
 # Installer une version
-mise install node@20
+mise install node@24
 mise install python@latest
-mise install node@20 python@3.12 go@1.22
+mise install node@24 python@3.12 go@1.22
 
 # Définir pour le projet courant (.mise.toml)
-mise use node@20
+mise use node@24
 
 # Définir globalement (~/.config/mise/config.toml)
-mise use --global node@20
+mise use --global node@24
 
 # Exécuter une commande avec une version précise
 mise exec node@18 -- node --version
@@ -43,11 +41,7 @@ mise outdated       # outils à mettre à jour
 mise upgrade        # tout mettre à jour
 ```
 
-</div>
-
 ::right::
-
-<div class="mt-2">
 
 ### Registre & plugins
 
@@ -71,12 +65,10 @@ mise plugin add my-tool \
 
 ```toml
 [tools]
-node       = "20"          # version majeure
+node       = "24"          # version majeure
 python     = "3.12.3"      # version exacte
 go         = "latest"      # dernière stable
 terraform  = "1.7"
 awscli     = "2"
 jq         = "latest"
 ```
-
-</div>

@@ -13,52 +13,33 @@ layoutClass: gap-8
 
 # fnox — Qu'est-ce que c'est ?
 
-<div class="mt-2">
-
 **fnox** est le compagnon de mise pour gérer vos secrets.
 Il stocke les secrets de **deux façons** :
 
-<div v-click class="mt-4 p-3 rounded border border-purple-400/30 bg-purple-400/5">
-  <div class="font-bold mb-1">🔐 Chiffrés dans git</div>
-  <div class="text-sm opacity-80">
-    via <code>age</code>, AWS KMS, Azure KMS, GCP KMS<br/>
-    → commitables en toute sécurité
-  </div>
-</div>
+<v-clicks>
 
-<div v-click class="mt-3 p-3 rounded border border-blue-400/30 bg-blue-400/5">
-  <div class="font-bold mb-1">☁️ Dans le cloud</div>
-  <div class="text-sm opacity-80">
-    AWS Secrets Manager, Vault, 1Password,<br/>
-    Bitwarden, Infisical, GCP Secret Manager…
-  </div>
-</div>
+- 🔐 **Chiffrés dans git** — via `age`, AWS KMS, Azure KMS, GCP KMS → commitables en toute sécurité
 
-<div v-click class="mt-3 p-3 rounded border border-green-400/30 bg-green-400/5">
-  <div class="font-bold mb-1">💻 En local</div>
-  <div class="text-sm opacity-80">
-    OS Keychain, KeePass, pass (GPG)
-  </div>
-</div>
+- ☁️ **Dans le cloud** — AWS Secrets Manager, Vault, 1Password, Bitwarden, Infisical, GCP Secret Manager…
 
-</div>
+- 💻 **En local** — OS Keychain, KeePass, pass (GPG)
+
+</v-clicks>
 
 ::right::
 
-<div class="mt-2">
-
 ### Pourquoi fnox ?
 
-<div v-click>
+<v-clicks>
 
 - 🤝 **Team-friendly** — secrets chiffrés dans git, tout le monde peut déchiffrer
 - 🌍 **Multi-environnements** — dev chiffré, prod via AWS SM
 - 🔄 **Shell integration** — auto-chargement au `cd`
 - 🔒 **Pas de vendor lock-in** — changer de provider sans modifier le code
 
-</div>
+</v-clicks>
 
-<div v-click class="mt-6">
+<v-click>
 
 ### Installation
 
@@ -70,17 +51,14 @@ mise use -g fnox
 cargo install fnox
 ```
 
-</div>
+</v-click>
 
-</div>
-
+---
+layout: two-cols
+layoutClass: gap-8
 ---
 
 # fnox — Configuration & utilisation
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### `fnox.toml`
 
@@ -104,9 +82,7 @@ aws = { type = "aws-sm", region = "eu-west-1", prefix = "myapp/" }
 DATABASE_URL = { provider = "aws", value = "database-url" }
 ```
 
-</div>
-
-<div>
+::right::
 
 ### Commandes essentielles
 
@@ -123,7 +99,7 @@ fnox exec -- npm start
 fnox exec --profile production -- ./deploy.sh
 ```
 
-<div v-click class="mt-4">
+<v-click>
 
 ### Shell integration (auto-load)
 
@@ -138,13 +114,6 @@ eval "$(fnox activate zsh)"
 fnox activate fish | source
 ```
 
-<div class="mt-2 p-3 rounded bg-purple-500/10 border border-purple-500/30 text-sm">
-  ✅ Les secrets se chargent automatiquement au <code>cd</code>,
-  comme mise charge les runtimes.
-</div>
+> ✅ Les secrets se chargent automatiquement au `cd`, comme mise charge les runtimes.
 
-</div>
-
-</div>
-
-</div>
+</v-click>

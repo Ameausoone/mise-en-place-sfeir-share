@@ -5,12 +5,11 @@ layout: section
 # 🌍 Environnement & Configuration
 
 ---
+layout: two-cols
+layoutClass: gap-8
+---
 
 # Variables d'environnement
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### Dans `.mise.toml`
 
@@ -39,9 +38,7 @@ _.path = "{{env.GOPATH}}/bin"
 DATABASE_URL = "postgres://{{env.DB_USER}}@localhost/mydb"
 ```
 
-</div>
-
-<div>
+::right::
 
 ### Config locale (secrets)
 
@@ -57,20 +54,14 @@ API_KEY   = "sk-..."
 
 ```
 monorepo/
-├── .mise.toml          ← Node 20, env communs
+├── .mise.toml          ← Node 24, env communs
 ├── backend/
 │   └── .mise.toml      ← Python 3.12, PORT=8000
 └── frontend/
     └── .mise.toml      ← PORT=3000
 ```
 
-<div class="mt-3 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
-  💡 Chaque sous-répertoire hérite et peut surcharger
-  la configuration du parent.
-</div>
-
-</div>
-</div>
+> 💡 Chaque sous-répertoire hérite et peut surcharger la configuration du parent.
 
 ---
 layout: center
@@ -78,62 +69,27 @@ layout: center
 
 # Migration depuis d'autres outils
 
-<div class="grid grid-cols-3 gap-4 mt-6">
+<v-clicks>
 
-<div v-click class="p-4 rounded-lg border border-primary/30 text-center">
-  <div class="text-2xl font-bold mb-2">asdf</div>
-  <div class="text-sm opacity-70 mb-3">Migration transparente</div>
+- **asdf** — Migration transparente : `mise install` lit `.tool-versions`, compatible avec tous les plugins asdf
 
-```bash
-# mise lit .tool-versions
-# Compatible avec les plugins asdf
-mise install
-```
+- **nvm / fnm** — `mise use node@$(cat .nvmrc)` importe le `.nvmrc` ; mise le lit aussi automatiquement
 
-</div>
+- **direnv** — mise gère les `.envrc` ou utilise `[env]` dans `.mise.toml`, compatible direnv
 
-<div v-click class="p-4 rounded-lg border border-primary/30 text-center">
-  <div class="text-2xl font-bold mb-2">nvm / fnm</div>
-  <div class="text-sm opacity-70 mb-3">Remplacer Node manager</div>
-
-```bash
-# Importer depuis .nvmrc
-mise use node@$(cat .nvmrc)
-# Lire .nvmrc automatiquement
-```
-
-</div>
-
-<div v-click class="p-4 rounded-lg border border-primary/30 text-center">
-  <div class="text-2xl font-bold mb-2">direnv</div>
-  <div class="text-sm opacity-70 mb-3">Variables d'env</div>
-
-```bash
-# mise gère les .envrc
-# ou utilise .mise.toml [env]
-# Compatible direnv
-```
-
-</div>
-
-</div>
-
-<div v-click class="mt-6 text-center">
+</v-clicks>
 
 ```bash
 # Migration depuis .tool-versions (asdf)
 mise install  # lit automatiquement .tool-versions
-```
+``` {v-click}
 
-</div>
-
+---
+layout: two-cols
+layoutClass: gap-8
 ---
 
 # Pourquoi mise est rapide ? 🦀
-
-<div class="grid grid-cols-2 gap-6 mt-4">
-
-<div>
 
 ### Écrit en Rust
 
@@ -149,9 +105,9 @@ mise install  # lit automatiquement .tool-versions
 | mise  | ~4ms                   |
 | nvm   | ~100ms                 |
 
-</div>
+::right::
 
-<div v-click>
+<v-click>
 
 ### Shims vs PATH
 
@@ -163,13 +119,9 @@ mise modifie directement le PATH
 → exécution directe, sans overhead
 ```
 
-<div class="mt-4 p-3 rounded bg-green-500/10 border border-green-500/30">
-  ✅ 50x plus rapide qu'asdf au démarrage du shell
-</div>
+> ✅ 50x plus rapide qu'asdf au démarrage du shell
 
-</div>
-
-</div>
+</v-click>
 
 ---
 layout: two-cols
@@ -220,8 +172,8 @@ mon-projet/
     MISE_YES: "1"   # Approuver automatiquement
 ```
 
-<div v-click class="mt-4 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
-  💡 <code>.mise.toml</code> remplace <code>.nvmrc</code>,
-  <code>.tool-versions</code>, <code>Makefile</code> et <code>.envrc</code>
-  en un <strong>seul fichier</strong>.
-</div>
+<v-click>
+
+> 💡 `.mise.toml` remplace `.nvmrc`, `.tool-versions`, `Makefile` et `.envrc` en un **seul fichier**.
+
+</v-click>

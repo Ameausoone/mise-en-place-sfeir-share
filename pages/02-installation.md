@@ -1,8 +1,9 @@
+---
+layout: two-cols
+layoutClass: gap-8
+---
+
 # Installation
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### Linux / macOS
 
@@ -20,9 +21,7 @@ cargo install mise
 winget install jdx.mise
 ```
 
-</div>
-
-<div>
+::right::
 
 ### Activation dans votre shell
 
@@ -40,12 +39,9 @@ mise activate fish | source
 mise activate nu | save -f ~/.config/nushell/mise.nu
 ```
 
-</div>
-</div>
+<v-click>
 
-<div v-click class="mt-4">
-
-### `mise doctor` — diagnostics d'installation
+### `mise doctor` — diagnostics
 
 ```bash
 mise doctor
@@ -55,7 +51,7 @@ mise doctor
 # ✓ ~/.local/share/mise/shims is in PATH
 ```
 
-</div>
+</v-click>
 
 <!--
 L'installation est rapide et l'activation dans le shell permet à mise de charger

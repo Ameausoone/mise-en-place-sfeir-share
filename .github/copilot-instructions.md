@@ -34,10 +34,16 @@ The build uses `--base /mise-en-place-sfeir-share/` for GitHub Pages deployment.
 ## Content guidelines
 
 - Language: **French** (slides are in French)
+- Node version: **24**
 - Each section lives in its own `pages/NN-name.md` file
 - `slides.md` must remain a minimal entry point — only frontmatter, cover slide, and `src:` imports
 - Code blocks must use languages supported by Shiki (avoid `gitignore`, use `bash` instead)
-- Prefer `v-click` for progressive disclosure on content slides
+- **Prefer Slidev-native features over raw HTML tags:**
+  - Use `layout: two-cols` (with `::right::` slot) instead of `<div class="grid grid-cols-2">`
+  - Use `<v-clicks>` to animate lists instead of individual `<div v-click>` wrappers
+  - Use `<v-click>` (Slidev Vue component) for click-revealing a block
+  - Use `> text` blockquotes for callout/info boxes
+  - Use markdown syntax for bold (`**`), italic (`_`), code (`` ` ``), and links (`[text](url)`)
 - Use `layout: section` slides as section dividers
 
 ## CI/CD

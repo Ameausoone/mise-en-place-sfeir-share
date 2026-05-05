@@ -18,9 +18,7 @@ comark: true
 
 ### Gérer votre environnement de développement
 
-<div class="mt-4 text-lg opacity-80">
-  Tools · Registry · Tasks · Hooks · fnox
-</div>
+Tools · Registry · Tasks · Hooks · fnox
 
 <div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
   Appuyez sur Espace <carbon:arrow-right />

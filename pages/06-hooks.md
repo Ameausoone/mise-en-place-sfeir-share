@@ -5,12 +5,11 @@ layout: section
 # 🪝 Hooks
 
 ---
+layout: two-cols
+layoutClass: gap-8
+---
 
 # Hooks — Réagir aux événements
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### Hooks de répertoire
 
@@ -20,7 +19,7 @@ Déclenchés automatiquement quand vous **entrez ou quittez** un répertoire :
 # .mise.toml
 [hooks]
 enter = "echo '👋 Bienvenue dans {{config.project_root}}'"
-leave = "echo '👋 À bientôt !'"
+leave = "echo '�� À bientôt !'"
 ```
 
 ### Cas d'usage concrets
@@ -38,9 +37,9 @@ enter = """
 leave = "pkill -f 'npm run dev' || true"
 ```
 
-</div>
+::right::
 
-<div v-click>
+<v-click>
 
 ### Hooks de tâches — `pre` / `post`
 
@@ -70,17 +69,14 @@ post_task = """
 | `MISE_TASK_EXIT_CODE` | Code de sortie |
 | `config.project_root` | Racine du projet |
 
-</div>
+</v-click>
 
-</div>
-
+---
+layout: two-cols
+layoutClass: gap-8
 ---
 
 # Hooks — `watch_files`
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### Surveiller des fichiers
 
@@ -105,9 +101,9 @@ description = "Synchroniser les dépendances"
 "package.json"   = "sync-deps"
 ```
 
-</div>
+::right::
 
-<div v-click>
+<v-click>
 
 ### Activer la surveillance
 
@@ -134,10 +130,6 @@ run = """
 """
 ```
 
-<div class="mt-3 p-3 rounded bg-green-500/10 border border-green-500/30 text-sm">
-  ✅ Fini les <em>"n'oublie pas de relancer X après avoir modifié Y"</em>
-</div>
+> ✅ Fini les _"n'oublie pas de relancer X après avoir modifié Y"_
 
-</div>
-
-</div>
+</v-click>

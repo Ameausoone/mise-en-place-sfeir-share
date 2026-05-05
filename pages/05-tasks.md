@@ -11,8 +11,6 @@ layoutClass: gap-8
 
 # Tasks — Dans `.mise.toml`
 
-<div class="mt-2">
-
 ### Définir des tâches
 
 ```toml
@@ -39,11 +37,7 @@ description = "Build de production"
 depends     = ["lint", "test"]
 ```
 
-</div>
-
 ::right::
-
-<div class="mt-2">
 
 ### Exécuter
 
@@ -78,15 +72,12 @@ env   = { ENVIRONMENT = "production" }
 depends = ["test", "build"]
 ```
 
-</div>
-
+---
+layout: two-cols
+layoutClass: gap-8
 ---
 
 # Tasks — Tâches fichiers
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### Scripts dans `.mise/tasks/`
 
@@ -114,9 +105,9 @@ set -euo pipefail
 npm run dev
 ```
 
-</div>
+::right::
 
-<div v-click>
+<v-click>
 
 ### Avantages des tâches fichiers
 
@@ -143,17 +134,14 @@ chmod +x .mise/tasks/generate-report
 mise run generate-report
 ```
 
-</div>
+</v-click>
 
-</div>
-
+---
+layout: two-cols
+layoutClass: gap-8
 ---
 
 # Tasks — Options avancées
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### `mise watch` — Rechargement automatique
 
@@ -183,9 +171,9 @@ depends = ["lint", "test"]
 run     = "npm run build"
 ```
 
-</div>
+::right::
 
-<div v-click>
+<v-click>
 
 ### Arguments & `usage`
 
@@ -213,6 +201,4 @@ mise run --help          # aide globale
 mise run deploy --help   # aide de la tâche
 ```
 
-</div>
-
-</div>
+</v-click>

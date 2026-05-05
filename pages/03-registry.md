@@ -11,8 +11,6 @@ layoutClass: gap-8
 
 # Registry — 800+ outils disponibles
 
-<div class="mt-2">
-
 ### Explorer le registre
 
 ```bash
@@ -41,11 +39,7 @@ mise use node terraform kubectl \
 | `terraform`, `kubectl`, `helm` | asdf / aqua |
 | `gh`, `jq`, `ripgrep`, `fd`    | aqua / ubi |
 
-</div>
-
 ::right::
-
-<div class="mt-2">
 
 ### Les backends
 
@@ -54,7 +48,7 @@ mise peut installer des outils via **plusieurs sources** :
 ```toml
 [tools]
 # asdf (par défaut, compatible 800+ plugins)
-node = "20"
+node = "24"
 terraform = "1.7"
 
 # npm — package npm global
@@ -75,15 +69,12 @@ terraform = "1.7"
 "go:mvdan.cc/gofumpt" = "latest"
 ```
 
-</div>
-
+---
+layout: two-cols
+layoutClass: gap-8
 ---
 
 # Registry — Lockfile
-
-<div class="grid grid-cols-2 gap-6">
-
-<div>
 
 ### `mise.lock` — figer les versions
 
@@ -92,7 +83,7 @@ terraform = "1.7"
 # À commiter dans git !
 
 [tools.node]
-version  = "20.11.0"
+version  = "24.0.0"
 checksum = "sha256:abc123…"
 
 [tools.python]
@@ -112,18 +103,18 @@ mise settings set lockfile true
 mise install
 ```
 
-</div>
+::right::
 
-<div v-click>
+<v-click>
 
 ### Reproductibilité garantie
 
 ```bash
 # Machine A (dev)
-mise install  # installe node@20.11.0
+mise install  # installe node@24.0.0
 
 # Machine B (CI)
-mise install  # installe node@20.11.0 ✓
+mise install  # installe node@24.0.0 ✓
 
 # Mettre à jour le lockfile
 mise upgrade        # met à jour toutes les versions
@@ -138,11 +129,6 @@ mise upgrade node   # met à jour seulement node
   # installe exactement les bonnes versions
 ```
 
-<div class="mt-3 p-3 rounded bg-blue-500/10 border border-blue-500/30 text-sm">
-  💡 Comme <code>package-lock.json</code> mais pour
-  <strong>tous vos runtimes et outils CLI</strong>.
-</div>
+> 💡 Comme `package-lock.json` mais pour **tous vos runtimes et outils CLI**.
 
-</div>
-
-</div>
+</v-click>
