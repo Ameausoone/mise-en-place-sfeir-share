@@ -16,6 +16,7 @@ class: text-center
 - 📋 **Tasks** — scripts reproductibles avec dépendances
 - 🪝 **Hooks** — réagir aux événements du projet
 - 🔐 **fnox** — secrets chiffrés dans git ou cloud
+- 🏗️ **Platform Engineering** — cross-repo, monorepo, onboarding uniforme
 - ⚡ **Rapide** — écrit en Rust, ~4ms de démarrage
 
 </v-click>

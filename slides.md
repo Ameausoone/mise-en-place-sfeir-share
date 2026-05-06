@@ -68,5 +68,9 @@ src: ./pages/08-fnox.md
 ---
 
 ---
+src: ./pages/10-platform-engineering.md
+---
+
+---
 src: ./pages/09-recap.md
 ---
