@@ -2,20 +2,24 @@
 
 Présentation [Slidev](https://sli.dev/) sur [mise](https://mise.jdx.dev/) — l'outil polyvalent pour gérer les versions de runtimes, les variables d'environnement et les tâches de développement.
 
+## Slides
+
+🎤 [Voir la présentation en ligne](https://ameausoone.github.io/mise-en-place-sfeir-share/)
+
 ## Démarrage
 
 ```bash
 # Installer les dépendances
-npm install
+mise run install
 
 # Démarrer le serveur de développement
-npm run dev
+mise run dev
 
 # Compiler pour la production
-npm run build
+mise run build
 
 # Exporter en PDF
-npm run export
+mise run export
 ```
 
 ## Contenu de la présentation
