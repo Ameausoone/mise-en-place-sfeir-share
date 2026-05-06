@@ -43,8 +43,12 @@ helm      = "3.16"
 NODE_ENV = "development"
 TF_WORKSPACE = "dev"
 
+[tasks.install-deps]
+run         = "npm install"
+description = "Installer les dépendances npm"
+
 [tasks.setup]
-run         = "mise install && npm install"
+depends     = ["install-deps"]
 description = "Onboarding complet en une commande"
 ```
 
@@ -152,7 +156,7 @@ jobs:
 ```toml
 # Convention : chaque repo expose ces tâches
 [tasks.ci]
-run     = "mise run lint && mise run test && mise run build"
+depends     = ["lint", "test", "build"]
 description = "Pipeline CI complet"
 
 [tasks.lint]
