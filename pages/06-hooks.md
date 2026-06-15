@@ -5,31 +5,23 @@ layout: section
 # 🪝 Hooks
 
 ---
-layout: two-cols
-layoutClass: gap-8
+transition: fade-out
 ---
 
 # Hooks — Réagir aux événements
 
-### Hooks de répertoire
-
 Déclenchés automatiquement quand vous **entrez ou quittez** un répertoire :
 
-```toml
+```toml {1-3|5-10|12-13|all}
 # .mise.toml
 [hooks]
 enter = "echo '👋 Bienvenue dans {{config.project_root}}'"
-leave = "echo '�� À bientôt !'"
-```
 
-### Cas d'usage concrets
-
-```toml
-[hooks]
 # Vérifier que les dépendances sont à jour
 enter = """
   if [ package.json -nt node_modules ]; then
-    echo "⚠️  Dépendances obsolètes, lancez : mise run install"
+    echo "⚠️  Dépendances obsolètes !"
+    echo "    → lancez : mise run install"
   fi
 """
 
@@ -37,31 +29,32 @@ enter = """
 leave = "pkill -f 'npm run dev' || true"
 ```
 
-::right::
+---
+layout: two-cols
+layoutClass: gap-8
+transition: fade-out
+---
 
-<v-click>
-
-### Hooks de tâches — `pre` / `post`
+# Hooks — pre / post tâche
 
 ```toml
-[tasks.deploy]
-run  = "./scripts/deploy.sh"
-
 [hooks]
-# Avant chaque tâche
 pre_task  = """
   echo "🚀 Démarrage : $MISE_TASK_NAME"
   date
 """
 
-# Après chaque tâche (succès ou échec)
 post_task = """
   echo "✅ Terminé  : $MISE_TASK_NAME"
   echo "   Exit code : $MISE_TASK_EXIT_CODE"
 """
 ```
 
-### Variables disponibles dans les hooks
+::right::
+
+<v-click>
+
+### Variables disponibles
 
 | Variable | Valeur |
 |---|---|
@@ -71,51 +64,44 @@ post_task = """
 
 </v-click>
 
+<v-click>
+
+> 💡 Les hooks `pre_task` / `post_task` s'appliquent à **toutes** les tâches du projet.
+
+</v-click>
+
 ---
 layout: two-cols
 layoutClass: gap-8
+transition: fade-out
 ---
 
 # Hooks — `watch_files`
 
-### Surveiller des fichiers
-
-`watch_files` déclenche une tâche automatiquement dès qu'un fichier change :
+Déclenche une tâche automatiquement dès qu'un fichier change :
 
 ```toml
-# .mise.toml
-
 [tasks.codegen]
-run         = "npm run generate"
-description = "Regénérer le code depuis le schéma"
+run = "npm run generate"
 
 [tasks.sync-deps]
-run         = "npm install"
-description = "Synchroniser les dépendances"
+run = "npm install"
 
 [watch_files]
-# Regénérer si le schéma GraphQL change
 "schema.graphql" = "codegen"
-
-# Réinstaller si package.json change
 "package.json"   = "sync-deps"
+```
+
+```bash
+# Démarrer le watcher
+mise watch
+# ↓ Modifiez schema.graphql…
+# ✓ codegen relancé automatiquement !
 ```
 
 ::right::
 
 <v-click>
-
-### Activer la surveillance
-
-```bash
-# Démarrer le watcher
-mise watch
-
-# Tous les watch_files sont surveillés
-# Les tâches se déclenchent automatiquement
-# ↓ Modifiez schema.graphql…
-# ✓ codegen relancé automatiquement !
-```
 
 ### Combinaison hooks + watch
 
@@ -129,6 +115,10 @@ run = """
   echo "Vérifiez votre .env local."
 """
 ```
+
+</v-click>
+
+<v-click>
 
 > ✅ Fini les _"n'oublie pas de relancer X après avoir modifié Y"_
 

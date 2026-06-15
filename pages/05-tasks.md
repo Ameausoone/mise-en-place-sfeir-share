@@ -5,15 +5,12 @@ layout: section
 # 📋 Tasks
 
 ---
-layout: two-cols
-layoutClass: gap-8
+transition: fade-out
 ---
 
-# Tasks — Dans `.mise.toml`
+# Tasks — Définir dans `.mise.toml`
 
-### Définir des tâches
-
-```toml
+```toml {1-3|5-8|10-13|15-18|all}
 [tasks.install]
 run         = "npm install"
 description = "Installer les dépendances"
@@ -22,10 +19,6 @@ description = "Installer les dépendances"
 run         = "npm run dev"
 description = "Démarrer le serveur de développement"
 depends     = ["install"]
-
-[tasks.test]
-run         = "npm test -- --coverage"
-description = "Tests avec couverture de code"
 
 [tasks.lint]
 run         = ["eslint src/", "prettier --check src/"]
@@ -37,63 +30,84 @@ description = "Build de production"
 depends     = ["lint", "test"]
 ```
 
-::right::
+---
+transition: fade-out
+---
 
-### Exécuter
+# Tasks — Exécuter
 
-```bash
+```bash {1-2|4-5|7-8|10-11|all}
 # Lister toutes les tâches
 mise tasks
-mise run --list
 
 # Lancer une tâche
 mise run dev
-mise run test
 
 # Passer des arguments
 mise run test -- --watch
 
 # Exécution parallèle
 mise run --jobs 4 lint test
+```
 
-# Voir ce qui serait exécuté
+<v-click>
+
+```bash
+# Voir ce qui serait exécuté (dry-run)
 mise run --dry-run build
 ```
 
-### Variables dans les tâches
+</v-click>
 
-```toml
+---
+transition: fade-out
+---
+
+# Tasks — Variables & dépendances
+
+```toml {1-6|8-10|all}
 [tasks.deploy]
 run = """
   echo "Deploying to $ENVIRONMENT"
   docker build -t myapp:$VERSION .
 """
-env   = { ENVIRONMENT = "production" }
+env     = { ENVIRONMENT = "production" }
+
+# Graphe de dépendances : lint + test en parallèle,
+# puis build si les deux réussissent
 depends = ["test", "build"]
 ```
 
+<v-click>
+
+```bash
+mise run deploy
+# ↳ [lint] ✓   [test] ✓   (parallèle)
+# ↳ [build] ✓
+# ↳ [deploy] 🚀
+```
+
+</v-click>
+
 ---
-layout: two-cols
-layoutClass: gap-8
+transition: fade-out
 ---
 
 # Tasks — Tâches fichiers
 
-### Scripts dans `.mise/tasks/`
-
-Des **scripts shell exécutables** directement dans le repo,
-sans les écrire dans le `.mise.toml` :
+Des **scripts exécutables** dans `.mise/tasks/`, dans n'importe quel langage :
 
 ```
 .mise/
 └── tasks/
     ├── dev          ← mise run dev
     ├── test         ← mise run test
-    ├── build        ← mise run build
     └── db/
         ├── migrate  ← mise run db:migrate
         └── seed     ← mise run db:seed
 ```
+
+<v-click>
 
 ```bash
 #!/usr/bin/env bash
@@ -105,15 +119,17 @@ set -euo pipefail
 npm run dev
 ```
 
-::right::
+</v-click>
 
-<v-click>
+---
+layout: two-cols
+layoutClass: gap-8
+transition: fade-out
+---
 
-### Avantages des tâches fichiers
+# Tasks — Script Python
 
-- Écrites dans n'importe quel langage (`bash`, `python`, `node`…)
-- Coloration syntaxique dans l'éditeur
-- Testables et versionnables indépendamment
+N'importe quel langage est supporté :
 
 ```python
 #!/usr/bin/env python3
@@ -127,26 +143,36 @@ print(json.dumps(data, indent=2))
 ```
 
 ```bash
-# Rendre exécutable
+# Rendre exécutable puis lancer :
 chmod +x .mise/tasks/generate-report
-
-# Puis simplement :
 mise run generate-report
 ```
+
+::right::
+
+<v-click>
+
+### Avantages des tâches fichiers
+
+- Coloration syntaxique dans l'éditeur
+- Testables indépendamment
+- Versionnables dans git
+- N'importe quel langage
 
 </v-click>
 
 ---
 layout: two-cols
 layoutClass: gap-8
+transition: fade-out
 ---
 
-# Tasks — Options avancées
+# Tasks — `mise watch`
 
-### `mise watch` — Rechargement automatique
+Relancer automatiquement à chaque modification :
 
 ```bash
-# Relancer la tâche à chaque modification
+# Relancer à chaque changement
 mise watch -t test
 
 # Surveiller des fichiers spécifiques
@@ -154,51 +180,33 @@ mise watch -t build -- src/**/*.ts
 ```
 
 ```toml
-# Configurer dans .mise.toml
 [tasks.test]
 run     = "npm test"
 sources = ["src/**/*.ts", "tests/**/*.ts"]
 outputs = ["coverage/"]
 ```
 
-### Dépendances & graphe
-
-```toml
-[tasks.ci]
-# Lance lint et test en parallèle,
-# puis build si les deux réussissent
-depends = ["lint", "test"]
-run     = "npm run build"
-```
-
 ::right::
 
 <v-click>
 
-### Arguments & `usage`
+# Arguments & `usage`
 
 ```toml
 [tasks.deploy]
-#USAGE flag "-e --env <env>" help="Target environment"
+#USAGE flag "-e --env <env>" help="Target env"
 #USAGE flag "--dry-run"      help="Simulate only"
 run = """
   echo "Deploy to: $usage_env"
-  if [ "$usage_dry_run" = "true" ]; then
-    echo "(dry-run, nothing deployed)"
-  fi
+  [ "$usage_dry_run" = "true" ] \
+    && echo "(dry-run)" || true
 """
 ```
 
 ```bash
 mise run deploy --env staging
 mise run deploy --env prod --dry-run
-```
-
-### `mise run` — aide intégrée
-
-```bash
-mise run --help          # aide globale
-mise run deploy --help   # aide de la tâche
+mise run deploy --help  # aide intégrée
 ```
 
 </v-click>

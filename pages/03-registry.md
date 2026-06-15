@@ -5,90 +5,85 @@ layout: section
 # 📦 Registry
 
 ---
-layout: two-cols
-layoutClass: gap-8
+transition: fade-out
 ---
 
 # Registry — 800+ outils disponibles
 
-### Explorer le registre
+### Explorer & installer
 
-```bash
-# Lister tous les outils
+```bash {1|2-3|4-5|all}
+# Lister tous les outils disponibles
 mise registry
 
-# Rechercher
+# Rechercher un outil
 mise registry | grep -i terraform
-mise registry | grep -i java
 
-# Afficher les backends disponibles
-mise registry --backend asdf
-mise registry --backend aqua
+# Installer plusieurs outils d'un coup
+mise use node terraform kubectl helm awscli gh
 ```
 
-### Quelques outils populaires
+<v-click>
 
-```bash
-mise use node terraform kubectl \
-          helm awscli gh jq ripgrep
-```
+### Outils populaires et leurs backends
 
 | Outil | Backend |
 |-------|---------|
 | `node`, `python`, `go`, `ruby` | core / asdf |
 | `terraform`, `kubectl`, `helm` | asdf / aqua |
-| `gh`, `jq`, `ripgrep`, `fd`    | aqua / ubi |
+| `gh`, `jq`, `ripgrep`, `fd`    | aqua / ubi  |
 
-::right::
+</v-click>
 
-### Les backends
+---
+transition: fade-out
+---
 
-mise peut installer des outils via **plusieurs sources** :
+# Les backends
 
-```toml
+mise installe les outils via **plusieurs sources** selon leur nature :
+
+<v-clicks>
+
+```toml {1-3}
 [tools]
-# asdf (par défaut, compatible 800+ plugins)
+# asdf — compatible 800+ plugins
 node = "24"
-terraform = "1.7"
+```
 
-# npm — package npm global
-"npm:prettier" = "latest"
-"npm:typescript" = "5"
+```toml {1-3}
+# npm / pipx — packages isolés
+"npm:prettier"   = "latest"
+"pipx:ansible"   = "latest"
+```
 
-# cargo — compile depuis crates.io
+```toml {1-4}
+# cargo — compilé depuis crates.io
 "cargo:ripgrep" = "14"
 
-# pipx — package Python isolé
-"pipx:ansible" = "latest"
-
 # ubi — binaire GitHub Releases (universel)
-"ubi:cli/cli" = "latest"        # gh CLI
-"ubi:sharkdp/bat" = "latest"    # bat
-
-# go — binaire Go
-"go:mvdan.cc/gofumpt" = "latest"
+"ubi:sharkdp/bat" = "latest"
 ```
+
+</v-clicks>
 
 ---
 layout: two-cols
 layoutClass: gap-8
+transition: fade-out
 ---
 
-# Registry — Lockfile
+# Lockfile — `mise.lock`
 
-### `mise.lock` — figer les versions
+Figer les versions exactes pour reproductibilité :
 
 ```toml
 # mise.lock — généré automatiquement
-# À commiter dans git !
+# ✅ À commiter dans git !
 
 [tools.node]
 version  = "24.0.0"
 checksum = "sha256:abc123…"
-
-[tools.python]
-version  = "3.12.3"
-checksum = "sha256:def456…"
 
 [tools.terraform]
 version  = "1.7.5"
@@ -98,37 +93,43 @@ checksum = "sha256:ghi789…"
 ```bash
 # Activer le lockfile
 mise settings set lockfile true
-
-# Installer exactement les versions lockées
-mise install
 ```
 
 ::right::
 
 <v-click>
 
-### Reproductibilité garantie
+# Reproductibilité garantie
 
 ```bash
-# Machine A (dev)
-mise install  # installe node@24.0.0
+# Machine dev
+mise install   # → node@24.0.0
 
-# Machine B (CI)
-mise install  # installe node@24.0.0 ✓
-
-# Mettre à jour le lockfile
-mise upgrade        # met à jour toutes les versions
-mise upgrade node   # met à jour seulement node
+# Machine CI
+mise install   # → node@24.0.0 ✓
 ```
 
-### Intégration CI avec `jdx/mise-action`
+</v-click>
+
+<v-click>
+
+```bash
+# Mettre à jour
+mise upgrade        # toutes les versions
+mise upgrade node   # seulement node
+```
+
+</v-click>
+
+<v-click>
+
+### CI avec `jdx/mise-action`
 
 ```yaml
 - uses: jdx/mise-action@v2
-  # lit automatiquement .mise.toml + mise.lock
-  # installe exactement les bonnes versions
+  # lit .mise.toml + mise.lock automatiquement
 ```
 
-> 💡 Comme `package-lock.json` mais pour **tous vos runtimes et outils CLI**.
+> 💡 Comme `package-lock.json` mais pour **tous vos runtimes**.
 
 </v-click>

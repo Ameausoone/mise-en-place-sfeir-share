@@ -7,34 +7,39 @@ layout: section
 ### Fort Knox pour vos secrets
 
 ---
-layout: two-cols
-layoutClass: gap-8
+transition: fade-out
 ---
 
-# fnox — Qu'est-ce que c'est ?
+# fnox — Où sont stockés les secrets ?
 
 **fnox** est le compagnon de mise pour gérer vos secrets.
-Il stocke les secrets de **deux façons** :
 
 <v-clicks>
 
-- 🔐 **Chiffrés dans git** — via `age`, AWS KMS, Azure KMS, GCP KMS → commitables en toute sécurité
+- 🔐 **Chiffrés dans git** — via `age`, AWS KMS, Azure KMS, GCP KMS  
+  → commitables en toute sécurité
 
-- ☁️ **Dans le cloud** — AWS Secrets Manager, Vault, 1Password, Bitwarden, Infisical, GCP Secret Manager…
+- ☁️ **Dans le cloud** — AWS Secrets Manager, Vault, 1Password,  
+  Bitwarden, Infisical, GCP Secret Manager…
 
 - 💻 **En local** — OS Keychain, KeePass, pass (GPG)
 
 </v-clicks>
 
-::right::
+---
+transition: fade-out
+---
 
-### Pourquoi fnox ?
+# Pourquoi fnox ?
 
 <v-clicks>
 
-- 🤝 **Team-friendly** — secrets chiffrés dans git, tout le monde peut déchiffrer
-- 🌍 **Multi-environnements** — dev chiffré, prod via AWS SM
-- 🔄 **Shell integration** — auto-chargement au `cd`
+- 🤝 **Team-friendly** — secrets chiffrés dans git, toute l'équipe peut déchiffrer
+
+- 🌍 **Multi-environnements** — dev chiffré avec `age`, prod via AWS Secrets Manager
+
+- 🔄 **Shell integration** — auto-chargement au `cd`, comme mise pour les runtimes
+
 - 🔒 **Pas de vendor lock-in** — changer de provider sans modifier le code
 
 </v-clicks>
@@ -44,35 +49,26 @@ Il stocke les secrets de **deux façons** :
 ### Installation
 
 ```bash
-# Via mise (recommandé)
-mise use -g fnox
-
-# Via cargo
-cargo install fnox
+mise use -g fnox   # via mise (recommandé)
 ```
 
 </v-click>
 
 ---
-layout: two-cols
-layoutClass: gap-8
+transition: fade-out
 ---
 
-# fnox — Configuration & utilisation
+# fnox — Configuration
 
-### `fnox.toml`
-
-```toml
+```toml {1-3|5-8|10-14|all}
+# fnox.toml
 [providers]
-# Chiffrement local avec age (clé SSH !)
 age = { type = "age", recipients = ["age1..."] }
 
 [secrets]
-# Secret chiffré dans git (safe to commit ✓)
+# Chiffré dans git ✅
 DATABASE_URL = { provider = "age", value = "YWdl..." }
-
-# Valeur par défaut (plain, dev seulement)
-API_KEY = { default = "dev-key-12345" }
+API_KEY      = { default = "dev-key-12345" }
 
 # Profil production → AWS Secrets Manager
 [profiles.production.providers]
@@ -82,9 +78,13 @@ aws = { type = "aws-sm", region = "eu-west-1", prefix = "myapp/" }
 DATABASE_URL = { provider = "aws", value = "database-url" }
 ```
 
-::right::
+---
+layout: two-cols
+layoutClass: gap-8
+transition: fade-out
+---
 
-### Commandes essentielles
+# fnox — Commandes essentielles
 
 ```bash
 # Initialiser dans le projet
@@ -94,14 +94,18 @@ fnox init
 fnox set DATABASE_URL "postgres://localhost/mydb"
 fnox get DATABASE_URL
 
-# Lancer une commande avec les secrets chargés
+# Lancer avec les secrets chargés
 fnox exec -- npm start
 fnox exec --profile production -- ./deploy.sh
 ```
 
+::right::
+
 <v-click>
 
-### Shell integration (auto-load)
+# Shell integration
+
+Les secrets se chargent automatiquement au `cd` :
 
 ```bash
 # Bash (~/.bashrc)
@@ -110,10 +114,14 @@ eval "$(fnox activate bash)"
 # Zsh (~/.zshrc)
 eval "$(fnox activate zsh)"
 
-# Fish (~/.config/fish/config.fish)
+# Fish
 fnox activate fish | source
 ```
 
-> ✅ Les secrets se chargent automatiquement au `cd`, comme mise charge les runtimes.
+</v-click>
+
+<v-click>
+
+> ✅ Comme mise charge les runtimes, fnox charge vos secrets — **sans rien faire**.
 
 </v-click>
