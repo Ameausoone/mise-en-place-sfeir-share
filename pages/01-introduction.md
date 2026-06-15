@@ -37,6 +37,36 @@ transition: slide-up
 avec un seul outil, écrit en Rust 🦀
 
 ---
+layout: center
+class: text-center
+transition: fade-out
+---
+
+# Un seul fichier pour tout
+
+```toml
+# .mise.toml — à commiter dans git
+[tools]
+node      = "24"        # ← versions des runtimes
+python    = "3.12"
+terraform = "1.9"
+
+[env]
+NODE_ENV  = "development"   # ← variables d'environnement
+_.file    = ".env"
+
+[tasks.dev]
+run       = "npm run dev"   # ← scripts & automatisations
+depends   = ["install"]
+
+[hooks]
+enter     = "mise run check-deps"  # ← réactions aux événements
+
+[watch_files]
+"schema.graphql" = "codegen"  # ← surveillance de fichiers
+```
+
+---
 layout: two-cols
 layoutClass: gap-16
 transition: fade-out

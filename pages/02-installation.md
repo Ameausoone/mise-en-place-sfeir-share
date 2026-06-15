@@ -77,3 +77,44 @@ mise doctor
 ```
 
 </v-click>
+
+---
+transition: fade-out
+---
+
+# `mise trust` — Modèle de sécurité
+
+La première fois que vous `cd` dans un projet avec `.mise.toml` :
+
+<v-click>
+
+```bash
+cd ~/projects/mon-projet
+
+⚠️  mise a trouvé un fichier .mise.toml non approuvé
+    /home/alice/projects/mon-projet/.mise.toml
+    Voulez-vous lui faire confiance ? [y/N]
+```
+
+</v-click>
+
+<v-click>
+
+```bash
+# Approuver explicitement
+mise trust
+
+# Approuver tous les projets d'un répertoire
+mise trust ~/projects/
+
+# Révoquer la confiance
+mise untrust
+```
+
+</v-click>
+
+<v-click>
+
+> 🔒 Pourquoi ? Un `.mise.toml` peut exécuter des commandes (hooks, tasks). Faire confiance à un repo = accepter que ses scripts s'exécutent automatiquement.
+
+</v-click>
