@@ -40,6 +40,10 @@ src: ./pages/01-introduction.md
 ---
 
 ---
+src: ./pages/00-author.md
+---
+
+---
 src: ./pages/02-installation.md
 ---
 
