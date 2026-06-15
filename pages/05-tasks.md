@@ -10,7 +10,7 @@ transition: fade-out
 
 # Tasks — Définir dans `.mise.toml`
 
-```toml {1-3|5-8|10-13|15-18|all}
+```toml {1-3|5-8|10-12|14-17|all}
 [tasks.install]
 run         = "npm install"
 description = "Installer les dépendances"

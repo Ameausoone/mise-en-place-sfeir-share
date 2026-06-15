@@ -12,7 +12,7 @@ transition: fade-out
 
 ### Explorer & installer
 
-```bash {1|2-3|4-5|all}
+```bash {1-2|4-5|7-8|all}
 # Lister tous les outils disponibles
 mise registry
 

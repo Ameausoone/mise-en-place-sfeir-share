@@ -12,7 +12,7 @@ transition: fade-out
 
 Déclenchés automatiquement quand vous **entrez ou quittez** un répertoire :
 
-```toml {1-3|5-10|12-13|all}
+```toml {1-3|5-11|13-14|all}
 # .mise.toml
 [hooks]
 enter = "echo '👋 Bienvenue dans {{config.project_root}}'"

@@ -27,7 +27,7 @@ transition: fade-out
 
 # Solution : `.mise.toml` commité dans git
 
-```toml {1-6|8-10|12-15|all}
+```toml {1-5|7-9|11-14|all}
 # .mise.toml — commité dans git ✅
 [tools]
 node      = "24"

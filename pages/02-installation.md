@@ -36,7 +36,7 @@ transition: fade-out
 
 # Activation dans votre shell
 
-```bash {1-2|3-4|5-6|7-8|all}
+```bash {1-2|4-5|7-8|all}
 # Bash (~/.bashrc)
 eval "$(mise activate bash)"
 

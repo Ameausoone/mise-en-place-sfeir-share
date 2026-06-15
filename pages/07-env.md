@@ -12,7 +12,7 @@ transition: fade-out
 
 ### Dans `.mise.toml`
 
-```toml {1-3|5-7|9-10|all}
+```toml {1-4|6-7|9-10|all}
 [env]
 # Variables statiques
 NODE_ENV = "development"

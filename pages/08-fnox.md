@@ -60,7 +60,7 @@ transition: fade-out
 
 # fnox — Configuration
 
-```toml {1-3|5-8|10-14|all}
+```toml {1-3|5-8|10-15|all}
 # fnox.toml
 [providers]
 age = { type = "age", recipients = ["age1..."] }
