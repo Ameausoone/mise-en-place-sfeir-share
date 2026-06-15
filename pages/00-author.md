@@ -34,11 +34,16 @@ Le créateur de mise (et fnox).
 
 | Projet | Description | ⭐ |
 |--------|-------------|-----|
-| **mise** | dev tools, env, tasks | 29.5k |
-| **fnox** | secrets manager | 1.8k |
-| **aube** | package manager Node | 1.4k |
-| **usage** | spec for CLIs | 733 |
-| **hk** | git hooks & lints | 957 |
+| **mise** | dev tools, env vars, task runner | 29.5k |
+| **fnox** | encrypted/remote secret manager | 1.8k |
+| **aube** | fast Node.js package manager | 1.4k |
+| **hk** | git hooks & project lints | 957 |
+| **usage** | spec & parser for CLIs `*` | 733 |
+| **pitchfork** | daemons with DX | 506 |
+| **mise-action** | GitHub Action pour mise | 311 |
+| **communique** | release notes powered by AI | 69 |
+
+`*` _usage_ est intégré dans mise pour l'autocomplétion des tâches
 
 </v-click>
 
