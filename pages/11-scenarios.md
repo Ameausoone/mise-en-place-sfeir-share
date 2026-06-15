@@ -63,17 +63,17 @@ transition: fade-out
 
 Le `cd` suffit — mise change tout automatiquement :
 
-```bash
-cd ~/projects/frontend
-node --version    # → v22.x   (défini dans frontend/.mise.toml)
-python --version  # → 3.11.x
+```text
+$ cd ~/projects/frontend
+$ node --version    → v22.x   (frontend/.mise.toml)
+$ python --version  → 3.11.x
 
-cd ~/projects/backend
-node --version    # → v24.x   (défini dans backend/.mise.toml)
-python --version  # → 3.12.x
+$ cd ~/projects/backend
+$ node --version    → v24.x   (backend/.mise.toml)
+$ python --version  → 3.12.x
 
-cd ~/projects/infra
-terraform --version  # → 1.9.x
+$ cd ~/projects/infra
+$ terraform --version  → 1.9.x
 ```
 
 ::right::

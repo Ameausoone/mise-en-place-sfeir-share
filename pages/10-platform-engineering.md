@@ -93,12 +93,12 @@ DOCKER_BUILDKIT = "1"
 
 <v-click>
 
-```bash
-cd ~/projects/frontend
-node --version        # → 22.x  (local)
+```text
+$ cd ~/projects/frontend
+$ node --version        → 22.x  (local)
 
-cd ~/projects/        # (pas de .mise.toml)
-node --version        # → 24.x  (global)
+$ cd ~/projects/        (pas de .mise.toml)
+$ node --version        → 24.x  (global)
 ```
 
 </v-click>
@@ -233,11 +233,11 @@ PORT      = "8000"
 
 <v-click>
 
-```bash
-# Dans packages/backend/
-echo $LOG_LEVEL    # → debug          (surcharge)
-echo $CI_REGISTRY  # → ghcr.io/myorg  (hérité)
-echo $PORT         # → 8000           (local)
+```text
+Dans packages/backend/ :
+$ echo $LOG_LEVEL    → debug          (surcharge)
+$ echo $CI_REGISTRY  → ghcr.io/myorg  (hérité)
+$ echo $PORT         → 8000           (local)
 ```
 
 > 💡 Héritage automatique des `.mise.toml` parents jusqu'à la racine.

@@ -202,12 +202,12 @@ mise settings set lockfile true
 
 # Reproductibilité garantie
 
-```bash
-# Machine dev
-mise install   # → node@24.0.0
+```text
+Machine dev :
+$ mise install   → node@24.0.0
 
-# Machine CI
-mise install   # → node@24.0.0 ✓
+Machine CI :
+$ mise install   → node@24.0.0 ✓
 ```
 
 </v-click>

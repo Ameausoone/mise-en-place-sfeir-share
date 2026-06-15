@@ -42,26 +42,26 @@ transition: fade-out
 
 # Un seul fichier pour tout
 
-```toml
+```text
 # .mise.toml — à commiter dans git
-[tools]
-node      = "24"        # ← versions des runtimes
-python    = "3.12"
-terraform = "1.9"
 
-[env]
-NODE_ENV  = "development"   # ← variables d'environnement
+[tools]                              ← versions des runtimes
+node      = "24"
+python    = "3.12"
+
+[env]                                ← variables d'environnement
+NODE_ENV  = "development"
 _.file    = ".env"
 
-[tasks.dev]
-run       = "npm run dev"   # ← scripts & automatisations
+[tasks.dev]                          ← scripts & automatisations
+run       = "npm run dev"
 depends   = ["install"]
 
-[hooks]
-enter     = "mise run check-deps"  # ← réactions aux événements
+[hooks]                              ← réactions aux événements
+enter     = "mise run check-deps"
 
-[watch_files]
-"schema.graphql" = "codegen"  # ← surveillance de fichiers
+[watch_files]                        ← surveillance de fichiers
+"schema.graphql" = "codegen"
 ```
 
 ---
