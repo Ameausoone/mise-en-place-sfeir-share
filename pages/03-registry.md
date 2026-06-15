@@ -61,11 +61,112 @@ node = "24"
 # cargo — compilé depuis crates.io
 "cargo:ripgrep" = "14"
 
-# ubi — binaire GitHub Releases (universel)
-"ubi:sharkdp/bat" = "latest"
+# go — binaire Go
+"go:mvdan.cc/gofumpt" = "latest"
 ```
 
 </v-clicks>
+
+---
+layout: two-cols
+layoutClass: gap-8
+transition: fade-out
+---
+
+# Backends GitHub & GitLab
+
+Installer **n'importe quel binaire** depuis GitHub ou GitLab Releases :
+
+```toml
+[tools]
+# GitHub Releases (public)
+"github:cli/cli"         = "latest"
+"github:sharkdp/bat"     = "latest"
+"github:BurntSushi/ripgrep" = "14"
+
+# GitLab Releases (public)
+"gitlab:inkscape/inkscape" = "latest"
+```
+
+<v-click>
+
+### GitHub Enterprise
+
+```toml
+[tools]
+"github:myorg/internal-tool" = { version = "latest", api_url = "https://github.mycompany.com/api/v3" }
+```
+
+```bash
+export GITHUB_TOKEN="ghp_..."   # ou MISE_GITHUB_TOKEN
+```
+
+</v-click>
+
+::right::
+
+<v-click>
+
+### GitLab self-hosted
+
+```toml
+[tools]
+"gitlab:myorg/mytool" = { version = "latest", api_url = "https://gitlab.mycompany.com/api/v4" }
+```
+
+```bash
+export MISE_GITLAB_TOKEN="glpat-..."
+# ou MISE_GITLAB_ENTERPRISE_TOKEN pour self-hosted
+```
+
+</v-click>
+
+<v-click>
+
+### Forgejo (Gitea)
+
+```toml
+[tools]
+"forgejo:myorg/mytool" = { version = "latest", api_url = "https://forgejo.mycompany.com/api/v1" }
+```
+
+</v-click>
+
+---
+transition: fade-out
+---
+
+# Backends pour registres privés
+
+<v-clicks>
+
+### S3 / stockage compatible (MinIO, DigitalOcean Spaces…)
+
+```toml
+[tools]
+"s3:my-company-tools/mytool" = { version = "latest", url = "s3://my-bucket/tools/mytool-{{version}}-linux-amd64.tar.gz", endpoint = "https://s3.mycompany.com", region = "eu-west-1" }
+```
+
+Auth via les credentials AWS standard (`AWS_ACCESS_KEY_ID`, `~/.aws/credentials`, IAM role)
+
+### HTTP avec authentification
+
+```toml
+[tools]
+"http:mytool" = { version = "1.0.0", url = "https://artifacts.mycompany.com/mytool-{{version}}.tar.gz" }
+```
+
+```bash
+export MISE_HTTP_AUTH_mytool="Bearer my-token"
+```
+
+</v-clicks>
+
+<v-click>
+
+> 🏢 **Use case entreprise** : distribuer des outils internes sans passer par npm/Artifactory — juste un binaire dans S3 ou GitHub Enterprise.
+
+</v-click>
 
 ---
 layout: two-cols
