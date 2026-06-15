@@ -8,3 +8,6 @@ components.d.ts
 
 # mise local overrides (environment-specific secrets)
 .mise.local.toml
+
+# Claude Code internal directory (sessions, worktrees)
+.claude/
