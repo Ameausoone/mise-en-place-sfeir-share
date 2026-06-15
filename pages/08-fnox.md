@@ -60,22 +60,23 @@ transition: fade-out
 
 # fnox — Configuration
 
-```toml {1-3|5-8|10-15|all}
-# fnox.toml
+```toml {1-3|5-8|10-16|all}
+# sfeir-conf/fnox.toml
 [providers]
 age = { type = "age", recipients = ["age1..."] }
 
 [secrets]
-# Chiffré dans git ✅
+# Chiffrés dans git ✅
 DATABASE_URL = { provider = "age", value = "YWdl..." }
-API_KEY      = { default = "dev-key-12345" }
+STRIPE_KEY   = { provider = "age", value = "YWdl..." }
 
 # Profil production → AWS Secrets Manager
 [profiles.production.providers]
-aws = { type = "aws-sm", region = "eu-west-1", prefix = "myapp/" }
+aws = { type = "aws-sm", region = "eu-west-1", prefix = "sfeir-conf/" }
 
 [profiles.production.secrets]
 DATABASE_URL = { provider = "aws", value = "database-url" }
+STRIPE_KEY   = { provider = "aws", value = "stripe-key" }
 ```
 
 ---
@@ -87,15 +88,17 @@ transition: fade-out
 # fnox — Commandes essentielles
 
 ```bash
+cd sfeir-conf/
+
 # Initialiser dans le projet
 fnox init
 
 # Gérer les secrets
-fnox set DATABASE_URL "postgres://localhost/mydb"
+fnox set DATABASE_URL "postgres://prod-host/sfeir_conf"
 fnox get DATABASE_URL
 
 # Lancer avec les secrets chargés
-fnox exec -- npm start
+fnox exec -- uvicorn app.main:app
 fnox exec --profile production -- ./deploy.sh
 ```
 

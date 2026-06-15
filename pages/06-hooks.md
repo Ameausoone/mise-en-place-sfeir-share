@@ -12,21 +12,23 @@ transition: fade-out
 
 Déclenchés automatiquement quand vous **entrez ou quittez** un répertoire :
 
-```toml {1-3|5-11|13-14|all}
-# .mise.toml
+```toml {1-3|5-13|15-16|all}
+# sfeir-conf/.mise.toml
 [hooks]
 enter = "echo '👋 Bienvenue dans {{config.project_root}}'"
 
 # Vérifier que les dépendances sont à jour
 enter = """
   if [ package.json -nt node_modules ]; then
-    echo "⚠️  Dépendances obsolètes !"
-    echo "    → lancez : mise run install"
+    echo "⚠️  npm install requis !"
+  fi
+  if [ requirements.txt -nt .venv ]; then
+    echo "⚠️  pip install requis !"
   fi
 """
 
 # Nettoyer les processus au départ
-leave = "pkill -f 'npm run dev' || true"
+leave = "pkill -f 'uvicorn' || true"
 ```
 
 ---
@@ -81,21 +83,25 @@ transition: fade-out
 Déclenche une tâche automatiquement dès qu'un fichier change :
 
 ```toml
+[tasks.install-frontend]
+run = "npm install"
+
+[tasks.install-backend]
+run = "pip install -r requirements.txt"
+
 [tasks.codegen]
 run = "npm run generate"
 
-[tasks.sync-deps]
-run = "npm install"
-
 [watch_files]
-"schema.graphql" = "codegen"
-"package.json"   = "sync-deps"
+"package.json"        = "install-frontend"
+"requirements.txt"    = "install-backend"
+"schema.graphql"      = "codegen"
 ```
 
 ```text
 $ mise watch
-  ↓ Modifiez schema.graphql…
-  ✓ codegen relancé automatiquement !
+  ↓ Modifiez requirements.txt…
+  ✓ install-backend relancé automatiquement !
 ```
 
 ::right::

@@ -14,7 +14,7 @@ transition: fade-out
 
 <v-clicks>
 
-- Chaque développeur a sa propre version de Node, Python, Terraform…
+- L'équipe sfeir-conf compte 5 développeurs, avec 3 versions de Node et 2 de Python…
 - Les scripts `Makefile` ne tournent pas partout
 - Les variables d'environnement divergent entre les membres
 - Le onboarding d'un nouveau développeur prend des heures
@@ -28,20 +28,20 @@ transition: fade-out
 # Solution : `.mise.toml` commité dans git
 
 ```toml {1-5|7-9|11-14|all}
-# .mise.toml — commité dans git ✅
+# sfeir-conf/.mise.toml — commité dans git ✅
 [tools]
 node      = "24"
 python    = "3.12"
 terraform = "1.9"
 
 [env]
-NODE_ENV     = "development"
-TF_WORKSPACE = "dev"
+NODE_ENV    = "development"
+AWS_REGION  = "eu-west-1"
 
 [tasks.setup]
-depends     = ["install-deps"]
-description = "Onboarding complet en une commande"
-run         = "mise install && mise run install-deps"
+run         = ["npm install", "pip install -r requirements.txt"]
+description = "Installer toutes les dépendances"
+depends     = []
 ```
 
 <v-click>
@@ -80,13 +80,12 @@ DOCKER_BUILDKIT = "1"
 ```text
 ~/.config/mise/config.toml   ← config globale
       ↓  hérite
-~/projects/
+~/projects/sfeir-conf/
+├── .mise.toml       ← node@24, python@3.12, terraform@1.9
 ├── frontend/
-│   └── .mise.toml   ← node@22 (override)
-├── backend/
-│   └── .mise.toml   ← python@3.11
-└── infra/
-    └── .mise.toml   ← terraform@1.8
+│   └── .mise.toml   ← PORT=3000
+└── backend/
+    └── .mise.toml   ← PORT=8000
 ```
 
 </v-click>
@@ -94,8 +93,8 @@ DOCKER_BUILDKIT = "1"
 <v-click>
 
 ```text
-$ cd ~/projects/frontend
-$ node --version        → 22.x  (local)
+$ cd ~/projects/sfeir-conf/frontend
+$ node --version        → 24.x  (local)
 
 $ cd ~/projects/        (pas de .mise.toml)
 $ node --version        → 24.x  (global)
@@ -112,7 +111,7 @@ transition: fade-out
 # CI/CD — `jdx/mise-action`
 
 ```yaml
-# .github/workflows/ci.yml
+# sfeir-conf/.github/workflows/ci.yml
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -136,17 +135,20 @@ jobs:
 ### Convention cross-repo
 
 ```toml
-# Chaque repo expose ces tâches standard
+# sfeir-conf — tâches standard exposées
 [tasks.ci]
 depends = ["lint", "test", "build"]
 
 [tasks.lint]
+run         = ["eslint src/", "ruff check app/"]
 description = "Vérifier le code"
 
 [tasks.test]
+run         = ["npm test", "pytest"]
 description = "Lancer les tests"
 
 [tasks.build]
+run         = "docker build -t sfeir-conf ."
 description = "Builder l'artefact"
 ```
 
@@ -164,19 +166,19 @@ transition: fade-out
 # Monorepo — Structure
 
 ```text
-monorepo/
+sfeir-conf/
 ├── .mise.toml          ← outils & env communs
 ├── mise.lock           ← lockfile commité ✅
+├── fnox.toml           ← secrets chiffrés
 ├── .mise/tasks/
-│   ├── ci              ← pipeline global
-│   └── release         ← release orchestrée
-└── packages/
-    ├── frontend/
-    │   └── .mise.toml  ← node@22, PORT=3000
-    ├── backend/
-    │   └── .mise.toml  ← python@3.12, PORT=8000
-    └── infra/
-        └── .mise.toml  ← terraform@1.9
+│   ├── dev             ← pipeline global
+│   └── deploy          ← déploiement orchestré
+├── frontend/
+│   └── .mise.toml      ← PORT=3000
+├── backend/
+│   └── .mise.toml      ← PORT=8000
+└── infra/
+    └── .mise.toml      ← terraform, AWS_WORKSPACE=dev
 ```
 
 ::right::
@@ -186,16 +188,16 @@ monorepo/
 ### Orchestration des packages
 
 ```toml
-# monorepo/.mise.toml
+# sfeir-conf/.mise.toml
 [tasks.ci]
 depends = ["ci:frontend", "ci:backend", "ci:infra"]
 
 [tasks."ci:frontend"]
-dir = "packages/frontend"
+dir = "frontend"
 run = "mise run ci"
 
 [tasks."ci:backend"]
-dir = "packages/backend"
+dir = "backend"
 run = "mise run ci"
 ```
 
@@ -213,20 +215,20 @@ transition: fade-out
 # Monorepo — Héritage d'environnement
 
 ```toml
-# monorepo/.mise.toml (racine)
+# sfeir-conf/.mise.toml (racine)
 [env]
-LOG_LEVEL   = "info"
-CI_REGISTRY = "ghcr.io/myorg"
+NODE_ENV    = "development"
+AWS_REGION  = "eu-west-1"
+API_URL     = "http://localhost:8000"
 ```
 
 <v-click>
 
 ```toml
-# packages/backend/.mise.toml
+# sfeir-conf/backend/.mise.toml
 [env]
-LOG_LEVEL = "debug"   # surcharge locale
-PORT      = "8000"
-# CI_REGISTRY hérité → "ghcr.io/myorg"
+PORT = "8000"
+# NODE_ENV et AWS_REGION hérités de la racine
 ```
 
 </v-click>
@@ -234,10 +236,10 @@ PORT      = "8000"
 <v-click>
 
 ```text
-Dans packages/backend/ :
-$ echo $LOG_LEVEL    → debug          (surcharge)
-$ echo $CI_REGISTRY  → ghcr.io/myorg  (hérité)
-$ echo $PORT         → 8000           (local)
+Dans sfeir-conf/backend/ :
+$ echo $NODE_ENV    → development   (hérité)
+$ echo $AWS_REGION  → eu-west-1     (hérité)
+$ echo $PORT        → 8000          (local)
 ```
 
 > 💡 Héritage automatique des `.mise.toml` parents jusqu'à la racine.

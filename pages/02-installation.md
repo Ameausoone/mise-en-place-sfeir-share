@@ -89,10 +89,10 @@ La première fois que vous `cd` dans un projet avec `.mise.toml` :
 <v-click>
 
 ```text
-cd ~/projects/mon-projet
+cd ~/projects/sfeir-conf
 
 ⚠️  mise a trouvé un fichier .mise.toml non approuvé
-    /home/alice/projects/mon-projet/.mise.toml
+    /home/alice/projects/sfeir-conf/.mise.toml
     Voulez-vous lui faire confiance ? [y/N]
 ```
 

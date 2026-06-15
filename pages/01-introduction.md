@@ -43,19 +43,20 @@ transition: fade-out
 # Un seul fichier pour tout
 
 ```text
-# .mise.toml — à commiter dans git
+# sfeir-conf/.mise.toml — à commiter dans git
 
 [tools]                              ← versions des runtimes
 node      = "24"
 python    = "3.12"
+terraform = "1.9"
 
 [env]                                ← variables d'environnement
 NODE_ENV  = "development"
-_.file    = ".env"
+API_URL   = "http://localhost:8000"
 
 [tasks.dev]                          ← scripts & automatisations
-run       = "npm run dev"
-depends   = ["install"]
+run       = ["npm run dev", "uvicorn app.main:app --reload"]
+depends   = ["setup"]
 
 [hooks]                              ← réactions aux événements
 enter     = "mise run check-deps"

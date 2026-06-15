@@ -13,16 +13,17 @@ transition: fade-out
 ### Dans `.mise.toml`
 
 ```toml {1-4|6-7|9-10|all}
+# sfeir-conf/.mise.toml
 [env]
-# Variables statiques
-NODE_ENV = "development"
-PORT     = "3000"
+NODE_ENV    = "development"
+API_URL     = "http://localhost:8000"
+AWS_REGION  = "eu-west-1"
 
 # Charger un fichier .env
-_.file = [".env", ".env.local"]
+_.file = ".env"
 
 # Ajouter au PATH
-_.path = ["./bin", "./node_modules/.bin"]
+_.path = ["./frontend/node_modules/.bin", "./backend/.venv/bin"]
 ```
 
 <v-click>
@@ -31,9 +32,7 @@ _.path = ["./bin", "./node_modules/.bin"]
 
 ```toml
 [env]
-GOPATH       = "{{env.HOME}}/go"
-_.path       = "{{env.GOPATH}}/bin"
-DATABASE_URL = "postgres://{{env.DB_USER}}@localhost/mydb"
+DATABASE_URL = "postgres://{{env.DB_USER}}@localhost/sfeir_conf"
 ```
 
 </v-click>
@@ -47,11 +46,11 @@ transition: fade-out
 # Config locale & secrets
 
 ```toml
-# .mise.local.toml  ← dans .gitignore !
+# sfeir-conf/.mise.local.toml  ← dans .gitignore !
 [env]
-DB_USER   = "alice"
-DB_PASS   = "s3cr3t"
-API_KEY   = "sk-..."
+DB_USER      = "alice"
+DATABASE_URL = "postgres://alice:s3cr3t@localhost/sfeir_conf"
+STRIPE_KEY   = "sk_test_..."
 ```
 
 <v-click>
@@ -59,12 +58,12 @@ API_KEY   = "sk-..."
 ### Héritage entre répertoires
 
 ```text
-monorepo/
-├── .mise.toml          ← Node 24, env communs
-├── backend/
-│   └── .mise.toml      ← Python 3.12, PORT=8000
-└── frontend/
-    └── .mise.toml      ← PORT=3000
+sfeir-conf/
+├── .mise.toml          ← NODE_ENV, API_URL, AWS_REGION
+├── frontend/
+│   └── .mise.toml      ← PORT=3000, VITE_API_URL=http://localhost:8000
+└── backend/
+    └── .mise.toml      ← PORT=8000, DATABASE_URL template
 ```
 
 </v-click>
@@ -172,7 +171,7 @@ transition: fade-out
 ### Structure recommandée
 
 ```text
-mon-projet/
+sfeir-conf/
 ├── .mise.toml          # Outils + env + tâches
 ├── .mise.local.toml    # Config locale (gitignored)
 ├── mise.lock           # Lockfile (commité ✓)
@@ -180,7 +179,7 @@ mon-projet/
     └── tasks/
         ├── dev
         ├── test
-        └── build
+        └── deploy
 ```
 
 ::right::

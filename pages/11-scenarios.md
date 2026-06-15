@@ -31,13 +31,13 @@ transition: fade-out
 ### Avec mise 🚀
 
 ```bash
-git clone git@github.com:myorg/project.git
-cd project
+git clone git@github.com:sfeir/sfeir-conf
+cd sfeir-conf
 
 # mise trust (une seule fois)
 mise trust
 
-# Installe tout : Node, Python, Terraform…
+# Installe tout : Node 24, Python 3.12, Terraform 1.9…
 mise install
 
 # Configure et démarre
@@ -64,15 +64,13 @@ transition: fade-out
 Le `cd` suffit — mise change tout automatiquement :
 
 ```text
-$ cd ~/projects/frontend
-$ node --version    → v22.x   (frontend/.mise.toml)
-$ python --version  → 3.11.x
+$ cd ~/projects/sfeir-conf/frontend
+$ node --version    → v24.x   (frontend/.mise.toml)
 
-$ cd ~/projects/backend
-$ node --version    → v24.x   (backend/.mise.toml)
-$ python --version  → 3.12.x
+$ cd ~/projects/sfeir-conf/backend
+$ python --version  → 3.12.x  (backend/.mise.toml)
 
-$ cd ~/projects/infra
+$ cd ~/projects/sfeir-conf/infra
 $ terraform --version  → 1.9.x
 ```
 
@@ -133,19 +131,19 @@ transition: fade-out
 ### Avec fnox ✅
 
 ```bash
-# Alice chiffre les secrets dans git
-fnox set DATABASE_URL "postgres://..."
-fnox set API_KEY "sk-prod-..."
+# Alice chiffre les secrets dans sfeir-conf
+fnox set DATABASE_URL "postgres://localhost/sfeir_conf"
+fnox set STRIPE_KEY "sk_test_..."
 git add fnox.toml && git commit -m "add secrets"
 git push
 
 # Bob clone le repo
-git clone ...
-cd project
+git clone git@github.com:sfeir/sfeir-conf
+cd sfeir-conf
 
-# Bob déchiffre avec sa clé SSH (déjà dans les recipients)
-fnox exec -- npm start
-# DATABASE_URL et API_KEY sont disponibles ✓
+# Bob déchiffre avec sa clé (déjà dans les recipients)
+fnox exec -- uvicorn app.main:app
+# DATABASE_URL et STRIPE_KEY sont disponibles ✓
 ```
 
 </v-click>

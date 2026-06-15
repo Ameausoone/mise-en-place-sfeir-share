@@ -11,22 +11,22 @@ transition: fade-out
 # Tasks — Définir dans `.mise.toml`
 
 ```toml {1-3|5-8|10-12|14-17|all}
-[tasks.install]
-run         = "npm install"
-description = "Installer les dépendances"
+[tasks.setup]
+run         = ["npm install", "pip install -r requirements.txt"]
+description = "Installer toutes les dépendances"
 
 [tasks.dev]
-run         = "npm run dev"
-description = "Démarrer le serveur de développement"
-depends     = ["install"]
+run         = ["npm run dev", "uvicorn app.main:app --reload"]
+description = "Démarrer frontend (Vite) + backend (FastAPI)"
+depends     = ["setup"]
 
 [tasks.lint]
-run         = ["eslint src/", "prettier --check src/"]
-description = "Vérifier le style du code"
+run         = ["eslint src/", "ruff check app/"]
+description = "Linter frontend (ESLint) + backend (Ruff)"
 
 [tasks.build]
-run         = "npm run build"
-description = "Build de production"
+run         = "docker build -t sfeir-conf ."
+description = "Build Docker"
 depends     = ["lint", "test"]
 ```
 
@@ -65,17 +65,19 @@ transition: fade-out
 
 # Tasks — Variables & dépendances
 
-```toml {1-6|8-10|all}
+```toml {1-4|6-9|11-13|all}
+[tasks.test]
+run         = ["npm test", "pytest"]
+description = "Tests frontend (Jest) + backend (pytest)"
+
 [tasks.deploy]
-run = """
-  echo "Deploying to $ENVIRONMENT"
-  docker build -t myapp:$VERSION .
-"""
-env     = { ENVIRONMENT = "production" }
+run         = "terraform apply"
+description = "Déployer sur AWS"
+depends     = ["build"]
 
 # Graphe de dépendances : lint + test en parallèle,
-# puis build si les deux réussissent
-depends = ["test", "build"]
+# puis build, puis deploy
+depends = ["lint", "test"]
 ```
 
 <v-click>
@@ -98,25 +100,23 @@ transition: fade-out
 Des **scripts exécutables** dans `.mise/tasks/`, dans n'importe quel langage :
 
 ```text
-.mise/
-└── tasks/
-    ├── dev          ← mise run dev
-    ├── test         ← mise run test
-    └── db/
-        ├── migrate  ← mise run db:migrate
-        └── seed     ← mise run db:seed
+sfeir-conf/.mise/tasks/
+├── dev      ← mise run dev
+├── test     ← mise run test
+└── deploy   ← mise run deploy
 ```
 
 <v-click>
 
 ```bash
 #!/usr/bin/env bash
-# .mise/tasks/dev
-#MISE description="Démarrer le serveur de dev"
-#MISE depends=["install"]
+# sfeir-conf/.mise/tasks/dev
+#MISE description="Frontend Vite + Backend FastAPI"
+#MISE depends=["setup"]
 
 set -euo pipefail
-npm run dev
+npm run dev &
+uvicorn app.main:app --reload
 ```
 
 </v-click>
@@ -181,8 +181,8 @@ mise watch -t build -- src/**/*.ts
 
 ```toml
 [tasks.test]
-run     = "npm test"
-sources = ["src/**/*.ts", "tests/**/*.ts"]
+run     = "pytest && npm test"
+sources = ["backend/app/**/*.py", "frontend/src/**/*.ts"]
 outputs = ["coverage/"]
 ```
 
@@ -194,12 +194,11 @@ outputs = ["coverage/"]
 
 ```toml
 [tasks.deploy]
-#USAGE flag "-e --env <env>" help="Target env"
-#USAGE flag "--dry-run"      help="Simulate only"
+#USAGE flag "-e --env <env>" help="Target environment (dev/staging/prod)"
+#USAGE flag "--dry-run"      help="Simulate deployment"
 run = """
-  echo "Deploy to: $usage_env"
-  [ "$usage_dry_run" = "true" ] \
-    && echo "(dry-run)" || true
+  echo "Deploying sfeir-conf to $usage_env"
+  [ "$usage_dry_run" = "true" ] && echo "(dry-run)" || terraform apply
 """
 ```
 

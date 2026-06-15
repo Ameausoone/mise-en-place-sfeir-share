@@ -25,13 +25,12 @@ mise use node terraform kubectl helm awscli gh
 
 <v-click>
 
-### Outils populaires et leurs backends
+### Outils utilisés dans sfeir-conf
 
 | Outil | Backend |
 |-------|---------|
-| `node`, `python`, `go`, `ruby` | core / asdf |
-| `terraform`, `kubectl`, `helm` | asdf / aqua |
-| `gh`, `jq`, `ripgrep`, `fd`    | aqua / ubi  |
+| `node`, `python`, `terraform` | core / asdf |
+| `gh`, `jq`, `ruff`            | aqua / ubi  |
 
 </v-click>
 
@@ -179,15 +178,17 @@ transition: fade-out
 Figer les versions exactes pour reproductibilité :
 
 ```toml
-# mise.lock — généré automatiquement
-# ✅ À commiter dans git !
-
+# sfeir-conf/mise.lock
 [tools.node]
-version  = "24.0.0"
+version  = "24.2.0"
 checksum = "sha256:abc123…"
 
+[tools.python]
+version  = "3.12.3"
+checksum = "sha256:def456…"
+
 [tools.terraform]
-version  = "1.7.5"
+version  = "1.9.5"
 checksum = "sha256:ghi789…"
 ```
 

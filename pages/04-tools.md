@@ -11,9 +11,9 @@ transition: fade-out
 # Tools — Installer & utiliser
 
 ```bash {1-3|5-6|8-9|11-12|all}
-# Installer des versions
-mise install node@24
-mise install node@24 python@3.12 go@1.22
+# Dans sfeir-conf/
+mise install   # installe node@24, python@3.12, terraform@1.9
+mise install node@24 python@3.12 terraform@1.9
 
 # Définir pour le projet courant (.mise.toml)
 mise use node@24
@@ -59,11 +59,10 @@ mise upgrade        # tout mettre à jour
 
 ```toml
 [tools]
-node       = "24"       # version majeure
-python     = "3.12.3"   # version exacte
-go         = "latest"   # dernière stable
-terraform  = "1.7"
-jq         = "latest"
+node       = "24"       # frontend Vite
+python     = "3.12"     # backend FastAPI
+terraform  = "1.9"      # infra AWS
+gh         = "latest"   # GitHub CLI
 ```
 
 </v-click>
