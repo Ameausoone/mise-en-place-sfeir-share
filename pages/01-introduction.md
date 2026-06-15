@@ -37,8 +37,6 @@ transition: slide-up
 avec un seul outil, écrit en Rust 🦀
 
 ---
-layout: center
-class: text-center
 transition: fade-out
 ---
 
