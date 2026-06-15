@@ -92,11 +92,10 @@ run = "npm install"
 "package.json"   = "sync-deps"
 ```
 
-```bash
-# Démarrer le watcher
-mise watch
-# ↓ Modifiez schema.graphql…
-# ✓ codegen relancé automatiquement !
+```text
+$ mise watch
+  ↓ Modifiez schema.graphql…
+  ✓ codegen relancé automatiquement !
 ```
 
 ::right::

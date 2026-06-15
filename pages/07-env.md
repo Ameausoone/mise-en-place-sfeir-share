@@ -58,7 +58,7 @@ API_KEY   = "sk-..."
 
 ### Héritage entre répertoires
 
-```
+```text
 monorepo/
 ├── .mise.toml          ← Node 24, env communs
 ├── backend/
@@ -171,7 +171,7 @@ transition: fade-out
 
 ### Structure recommandée
 
-```
+```text
 mon-projet/
 ├── .mise.toml          # Outils + env + tâches
 ├── .mise.local.toml    # Config locale (gitignored)

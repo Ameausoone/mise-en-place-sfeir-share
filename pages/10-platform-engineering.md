@@ -77,7 +77,7 @@ DOCKER_BUILDKIT = "1"
 
 ### Surcharge par repo
 
-```
+```text
 ~/.config/mise/config.toml   ← config globale
       ↓  hérite
 ~/projects/
@@ -163,7 +163,7 @@ transition: fade-out
 
 # Monorepo — Structure
 
-```
+```text
 monorepo/
 ├── .mise.toml          ← outils & env communs
 ├── mise.lock           ← lockfile commité ✅

@@ -80,11 +80,11 @@ depends = ["test", "build"]
 
 <v-click>
 
-```bash
-mise run deploy
-# ↳ [lint] ✓   [test] ✓   (parallèle)
-# ↳ [build] ✓
-# ↳ [deploy] 🚀
+```text
+$ mise run deploy
+  ↳ [lint] ✓   [test] ✓   (parallèle)
+  ↳ [build] ✓
+  ↳ [deploy] 🚀
 ```
 
 </v-click>
@@ -97,7 +97,7 @@ transition: fade-out
 
 Des **scripts exécutables** dans `.mise/tasks/`, dans n'importe quel langage :
 
-```
+```text
 .mise/
 └── tasks/
     ├── dev          ← mise run dev

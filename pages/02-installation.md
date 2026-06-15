@@ -69,7 +69,7 @@ mise doctor
 
 <v-click>
 
-```
+```text
 ✓ mise version: 2024.x.x
 ✓ shell: bash
 ✗ nvm detected — can conflict with mise
@@ -88,7 +88,7 @@ La première fois que vous `cd` dans un projet avec `.mise.toml` :
 
 <v-click>
 
-```bash
+```text
 cd ~/projects/mon-projet
 
 ⚠️  mise a trouvé un fichier .mise.toml non approuvé
