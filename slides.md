@@ -1,6 +1,6 @@
 ---
-theme: seriph
-background: https://cover.sli.dev
+theme: default
+background: '#1d1d2a'
 title: "Mise en place — Gérer votre environnement de développement"
 info: |
   ## Mise en place
@@ -11,7 +11,7 @@ class: text-center
 drawings:
   persist: false
 transition: slide-left
-comark: true
+colorSchema: light
 ---
 
 # Mise en place
