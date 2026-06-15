@@ -134,6 +134,15 @@ div[class*='language-'] {
   font-size: 0.85em;
 }
 
+/* ── Code comments — keep readable, not too grey ─────────────── */
+.shiki .line span[style*="color:#768390"],
+.shiki .line span[style*="color:#6a737d"],
+.shiki .line span[style*="color:#6A737D"],
+.shiki .line span[style*="color:#7f848e"],
+.shiki .line span[style*="color:#57606a"] {
+  color: #aab4c4 !important;
+}
+
 /* ── Links ───────────────────────────────────────────────────── */
 a {
   color: var(--sfeir-blue);

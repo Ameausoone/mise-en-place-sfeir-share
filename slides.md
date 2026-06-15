@@ -12,6 +12,7 @@ drawings:
   persist: false
 transition: slide-left
 colorSchema: light
+highlight: github-dark-dimmed
 ---
 
 # Mise en place
