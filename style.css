@@ -132,6 +132,8 @@ div[class*='language-'] {
 .slidev-layout pre code {
   font-family: 'Inconsolata', 'Consolas', monospace !important;
   font-size: 0.85em;
+  /* Base text color: bright white — syntax highlighting overrides per-token */
+  color: #e6edf3;
 }
 
 /* ── Code comments — keep readable, not too grey ─────────────── */
