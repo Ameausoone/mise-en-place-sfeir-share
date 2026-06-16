@@ -136,6 +136,12 @@ div[class*='language-'] {
   color: #e6edf3;
 }
 
+/* ── Plain `text` blocks — force bright foreground (Shiki uses grey default) ── */
+div[class*='language-text'] code span,
+div[class*='language-plain'] code span {
+  color: #e6edf3 !important;
+}
+
 /* ── Code comments — keep readable, not too grey ─────────────── */
 .shiki .line span[style*="color:#768390"],
 .shiki .line span[style*="color:#6a737d"],
