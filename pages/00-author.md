@@ -14,6 +14,7 @@ Le créateur de mise (et fnox).
 - 🦀 Quasi-exclusivement en **Rust**
 - 🌟 **3.9k** followers, **44+** sponsors
 - 🔧 Auteur du **Heroku CLI** et du **npm CLI**
+- 🏢 Fondateur de **[endevco](https://github.com/endevco)** — 100% open source
 
 </v-clicks>
 
@@ -26,7 +27,7 @@ Le créateur de mise (et fnox).
 
 <v-click>
 
-[github.com/jdx](https://github.com/jdx) · [@jdxcode](https://x.com/jdxcode)
+[github.com/jdx](https://github.com/jdx) · [@jdxcode](https://x.com/jdxcode) · [endevco](https://github.com/endevco)
 
 </v-click>
 
