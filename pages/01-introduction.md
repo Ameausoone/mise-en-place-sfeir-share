@@ -42,7 +42,7 @@ transition: fade-out
 
 # Un seul fichier pour tout
 
-```text
+```toml
 # sfeir-conf/.mise.toml — à commiter dans git
 
 [tools]                              ← versions des runtimes

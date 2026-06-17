@@ -44,19 +44,21 @@ mise installe les outils via **plusieurs sources** selon leur nature :
 
 <v-clicks>
 
-```toml {1-3}
+```toml
 [tools]
 # asdf — compatible 800+ plugins
 node = "24"
 ```
 
-```toml {1-3}
+```toml
+[tools]
 # npm / pipx — packages isolés
 "npm:prettier"   = "latest"
 "pipx:ansible"   = "latest"
 ```
 
-```toml {1-4}
+```toml
+[tools]
 # cargo — compilé depuis crates.io
 "cargo:ripgrep" = "14"
 
@@ -205,10 +207,10 @@ mise settings set lockfile true
 
 ```text
 Machine dev :
-$ mise install   → node@24.0.0
+$ mise install   → node@24.2.0
 
 Machine CI :
-$ mise install   → node@24.0.0 ✓
+$ mise install   → node@24.2.0 ✓
 ```
 
 </v-click>

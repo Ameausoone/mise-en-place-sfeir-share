@@ -12,7 +12,7 @@ transition: fade-out
 
 ### Dans `.mise.toml`
 
-```toml {1-4|6-7|9-10|all}
+```toml {1-5|6-8|9-11|all}
 # sfeir-conf/.mise.toml
 [env]
 NODE_ENV    = "development"

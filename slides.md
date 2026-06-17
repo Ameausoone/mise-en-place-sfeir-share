@@ -1,6 +1,5 @@
 ---
 theme: default
-background: '#1d1d2a'
 title: "Mise en place — Gérer votre environnement de développement"
 info: |
   ## Mise en place
@@ -11,8 +10,8 @@ class: text-center
 drawings:
   persist: false
 transition: slide-left
-colorSchema: light
-highlight: github-dark-dimmed
+#colorSchema: light
+highlight: github
 ---
 
 # Mise en place

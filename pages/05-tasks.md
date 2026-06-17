@@ -36,7 +36,7 @@ transition: fade-out
 
 # Tasks — Exécuter
 
-```bash {1-2|4-5|7-8|10-11|all}
+```bash {1-2|4-5|7-8|10-11|13-14|all}
 # Lister toutes les tâches
 mise tasks
 
@@ -48,16 +48,10 @@ mise run test -- --watch
 
 # Exécution parallèle
 mise run --jobs 4 lint test
-```
 
-<v-click>
-
-```bash
 # Voir ce qui serait exécuté (dry-run)
 mise run --dry-run build
 ```
-
-</v-click>
 
 ---
 transition: fade-out

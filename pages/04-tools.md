@@ -10,7 +10,7 @@ transition: fade-out
 
 # Tools — Installer & utiliser
 
-```bash {1-3|5-6|8-9|11-12|all}
+```bash {1-3|5-6|8-9|11-12|14-15|all}
 # Dans sfeir-conf/
 mise install   # installe node@24, python@3.12, terraform@1.9
 mise install node@24 python@3.12 terraform@1.9
@@ -23,16 +23,10 @@ mise use --global node@24
 
 # Exécuter avec une version précise
 mise exec node@18 -- node --version
-```
 
-<v-click>
-
-```bash
 # Lancer un shell isolé
 mise shell node@18
 ```
-
-</v-click>
 
 ---
 layout: two-cols

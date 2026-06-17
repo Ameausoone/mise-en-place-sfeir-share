@@ -63,7 +63,7 @@ transition: fade-out
 
 Le `cd` suffit — mise change tout automatiquement :
 
-```text
+```bash
 $ cd ~/projects/sfeir-conf/frontend
 $ node --version    → v24.x   (frontend/.mise.toml)
 
