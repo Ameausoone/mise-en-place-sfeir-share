@@ -71,3 +71,46 @@ mise plugin add scala \
 ```
 
 </v-click>
+
+---
+layout: two-cols
+layoutClass: gap-8
+transition: slide-up
+---
+
+# Onboarding `sfeir-conf` en 5 minutes
+
+### Avant mise
+
+```bash
+# README de 50 lignes...
+# "Installe nvm, puis Node 18.x (pas 20 !)"
+# "Active le virtualenv Python"
+# "Installe Terraform 1.7.5 (pas 1.8 !)"
+# "Copie .env.example et remplis les valeurs"
+# "Lance npm install, puis pip install..."
+# Durée réelle : 2-3h, souvent cassé
+```
+
+::right::
+
+<v-click>
+
+### Avec mise
+
+```bash
+git clone git@github.com:sfeir/sfeir-conf
+cd sfeir-conf
+
+mise trust
+mise install
+mise run setup
+```
+
+</v-click>
+
+<v-click>
+
+> ✅ **5 minutes**. Même sur une machine neuve. Le `.mise.toml` commité est la documentation vivante de l'environnement.
+
+</v-click>

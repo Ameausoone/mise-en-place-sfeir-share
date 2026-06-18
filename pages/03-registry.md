@@ -237,3 +237,57 @@ mise upgrade node   # seulement node
 > 💡 Comme `package-lock.json` mais pour **tous vos runtimes**.
 
 </v-click>
+
+---
+layout: two-cols
+layoutClass: gap-8
+transition: slide-up
+---
+
+# CI/CD — `sfeir-conf`
+
+```yaml
+# sfeir-conf/.github/workflows/ci.yml
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: jdx/mise-action@v2
+        # lit automatiquement .mise.toml + mise.lock
+
+      - run: mise install
+
+      - run: mise run ci
+        env:
+          MISE_YES: "1"
+```
+
+::right::
+
+<v-click>
+
+### Convention cross-repo
+
+```toml
+# sfeir-conf — tâches standard exposées
+[tasks.ci]
+depends = ["lint", "test", "build"]
+
+[tasks.lint]
+run         = ["eslint src/", "ruff check app/"]
+description = "Vérifier le code"
+
+[tasks.test]
+run         = ["npm test", "pytest"]
+description = "Lancer les tests"
+
+[tasks.build]
+run         = "docker build -t sfeir-conf ."
+description = "Builder l'artefact"
+```
+
+> 💡 `mise run ci` — interface uniforme quel que soit le repo ou le langage.
+
+</v-click>

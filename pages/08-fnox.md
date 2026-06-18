@@ -128,3 +128,49 @@ fnox activate fish | source
 > ✅ Comme mise charge les runtimes, fnox charge vos secrets — **sans rien faire**.
 
 </v-click>
+
+---
+layout: two-cols
+layoutClass: gap-8
+transition: slide-up
+---
+
+# Secrets en équipe — `sfeir-conf`
+
+### Avant fnox
+
+<v-clicks>
+
+- `DATABASE_URL` partagée par Slack, puis oublié de changer en prod
+- `.env` committé par accident sur git
+- Nouveau dev attend 2h que quelqu'un lui envoie les secrets
+- Secrets différents entre dev / staging / prod
+
+</v-clicks>
+
+::right::
+
+<v-click>
+
+### Avec fnox
+
+```bash
+# Alice chiffre les secrets dans sfeir-conf
+fnox set DATABASE_URL "postgres://localhost/sfeir_conf"
+fnox set STRIPE_KEY "sk_test_..."
+git add fnox.toml && git commit -m "add secrets"
+git push
+
+# Bob clone le repo et déchiffre avec sa clé
+git clone git@github.com:sfeir/sfeir-conf
+cd sfeir-conf
+fnox exec -- uvicorn app.main:app
+```
+
+</v-click>
+
+<v-click>
+
+> 🔐 Les secrets sont dans git, chiffrés, versionnés, auditables. Pas de partage par messagerie, pas de `.env` oublié.
+
+</v-click>

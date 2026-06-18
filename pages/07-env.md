@@ -207,3 +207,92 @@ sfeir-conf/
 > `Makefile` et `.envrc` en **un seul fichier**.
 
 </v-click>
+
+---
+layout: two-cols
+layoutClass: gap-8
+transition: fade-out
+---
+
+# Monorepo `sfeir-conf` — Structure
+
+```text
+sfeir-conf/
+├── .mise.toml          <- outils & env communs
+├── mise.lock           <- lockfile commité
+├── fnox.toml           <- secrets chiffrés
+├── .mise/tasks/
+│   ├── dev             <- pipeline global
+│   └── deploy          <- déploiement orchestré
+├── frontend/
+│   └── .mise.toml      <- PORT=3000
+├── backend/
+│   └── .mise.toml      <- PORT=8000
+└── infra/
+    └── .mise.toml      <- terraform, AWS_WORKSPACE=dev
+```
+
+::right::
+
+<v-click>
+
+### Orchestration des packages
+
+```toml
+# sfeir-conf/.mise.toml
+[tasks.ci]
+depends = ["ci:frontend", "ci:backend", "ci:infra"]
+
+[tasks."ci:frontend"]
+dir = "frontend"
+run = "mise run ci"
+
+[tasks."ci:backend"]
+dir = "backend"
+run = "mise run ci"
+```
+
+```bash
+# Lance tous les CI en parallèle
+mise run --jobs 4 ci
+```
+
+</v-click>
+
+---
+transition: slide-up
+---
+
+# Monorepo `sfeir-conf` — Héritage d'environnement
+
+```toml
+# sfeir-conf/.mise.toml (racine)
+[env]
+NODE_ENV    = "development"
+AWS_REGION  = "eu-west-1"
+API_URL     = "http://localhost:8000"
+```
+
+<v-click>
+
+```toml
+# sfeir-conf/backend/.mise.toml
+[env]
+PORT = "8000"
+# NODE_ENV et AWS_REGION hérités de la racine
+```
+
+</v-click>
+
+<v-click>
+
+```text
+Dans sfeir-conf/backend/ :
+$ echo $NODE_ENV    -> development   (hérité)
+$ echo $AWS_REGION  -> eu-west-1     (hérité)
+$ echo $PORT        -> 8000          (local)
+```
+
+> 💡 Héritage automatique des `.mise.toml` parents jusqu'à la racine.
+
+</v-click>

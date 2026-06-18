@@ -1,48 +1,53 @@
 ---
-layout: two-cols
-layoutClass: gap-8
-class: text-center
+layout: center
+transition: fade-out
 ---
 
-# Récapitulatif
+# Ce qu'on a construit sur `sfeir-conf`
+
+<v-clicks>
+
+- 🔧 **Tools** — Node 24, Python 3.12, Terraform 1.9 versionnés dans `.mise.toml` + `mise.lock`
+- 📦 **Registry + lockfile** — reproductibilité garantie en local et en CI (`jdx/mise-action`)
+- 📋 **Tasks** — `dev`, `test`, `lint`, `ci` : même interface dans tous les repos de l'équipe
+- 🪝 **Hooks** — activation automatique de l'environnement à chaque `cd`
+- 🌍 **Env + monorepo** — héritage de config racine → frontend / backend / infra
+- 🔐 **fnox** — secrets chiffrés dans git, déchiffrés automatiquement au `cd`
+
+</v-clicks>
 
 <v-click>
 
-### ✅ Ce que mise (+ fnox) fait
-
-- 🔧 **Tools** — gère Node, Python, Go, Terraform…
-- 📦 **Registry** — 800+ outils, multiples backends
-- 🌿 **Env** — variables d'environnement par projet
-- 📋 **Tasks** — scripts reproductibles avec dépendances
-- 🪝 **Hooks** — réagir aux événements du projet
-- 🔐 **fnox** — secrets chiffrés dans git ou cloud
-- 🏗️ **Platform Engineering** — cross-repo, monorepo, onboarding uniforme
-- ⚡ **Rapide** — écrit en Rust, ~4ms de démarrage
+> 🎯 mise est le **point d'entrée unique** de l'environnement `sfeir-conf`, du développeur jusqu'à la CI.
 
 </v-click>
 
-::right::
+---
+layout: center
+transition: fade-out
+---
+
+# En 3 commandes
+
+<v-clicks>
+
+```bash
+git clone git@github.com:sfeir/sfeir-conf
+```
+
+```bash
+mise install
+```
+
+```bash
+mise run dev
+```
+
+</v-clicks>
 
 <v-click>
 
-### 🚀 Pour démarrer
-
-```bash
-# 1. Installer mise
-curl https://mise.run | sh
-
-# 2. Activer dans votre shell
-echo 'eval "$(mise activate bash)"' >> ~/.bashrc
-
-# 3. Créer un .mise.toml
-mise use node@24 python@3.12
-
-# 4. Tout installer
-mise install
-
-# 5. Lancer une tâche
-mise run dev
-```
+> ✅ C'est tout. Outils, environnement, secrets, tâches — tout est dans le repo.
 
 </v-click>
 

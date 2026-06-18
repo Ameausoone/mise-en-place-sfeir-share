@@ -203,3 +203,38 @@ mise run deploy --help  # aide intégrée
 ```
 
 </v-click>
+
+---
+layout: center
+transition: slide-up
+---
+
+# Convention cross-équipe — `sfeir-conf`
+
+Même interface dans **tous** les repos, quel que soit le langage :
+
+<v-clicks>
+
+```bash
+mise run dev    # démarre le projet  (npm / uvicorn / go run...)
+```
+
+```bash
+mise run test   # lance les tests    (jest / pytest / go test...)
+```
+
+```bash
+mise run lint   # vérifie le code    (eslint / ruff / golangci...)
+```
+
+```bash
+mise run ci     # pipeline complet   (lint + test + build)
+```
+
+</v-clicks>
+
+<v-click>
+
+> 🎯 Un développeur qui rejoint une nouvelle équipe sait **déjà** comment interagir avec le projet.
+
+</v-click>

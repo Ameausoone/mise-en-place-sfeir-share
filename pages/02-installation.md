@@ -118,3 +118,49 @@ mise untrust
 > 🔒 Pourquoi ? Un `.mise.toml` peut exécuter des commandes (hooks, tasks). Faire confiance à un repo = accepter que ses scripts s'exécutent automatiquement.
 
 </v-click>
+
+---
+layout: two-cols
+layoutClass: gap-8
+transition: slide-up
+---
+
+# Config globale
+
+`~/.config/mise/config.toml` — outils disponibles partout :
+
+```toml
+[tools]
+node      = "24"
+python    = "3.12"
+jq        = "latest"
+gh        = "latest"
+
+[env]
+DOCKER_BUILDKIT = "1"
+```
+
+::right::
+
+<v-click>
+
+### Surcharge par repo
+
+```text
+~/.config/mise/config.toml   <- config globale
+      |  hérite
+~/projects/sfeir-conf/
+├── .mise.toml       <- node@24, python@3.12, terraform@1.9
+├── frontend/
+│   └── .mise.toml   <- PORT=3000
+└── backend/
+    └── .mise.toml   <- PORT=8000
+```
+
+</v-click>
+
+<v-click>
+
+> 💡 Sur `sfeir-conf`, chaque développeur embarque ses outils globaux (`gh`, `jq`) et le repo surcharge avec les versions exactes du projet.
+
+</v-click>
